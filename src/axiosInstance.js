@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {BASE_URL} from "./config";
+import Toast from "react-native-toast-message";
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL, // Replace with your API base URL
@@ -8,6 +9,11 @@ const axiosInstance = axios.create({
 // Response interceptor
 axiosInstance.interceptors.response.use(
     (response) => {
+        console.log(response.data, 'interceptor')
+        Toast.show({
+            type: response.data.status.toLowerCase(),
+            text1: response.data.info
+        });
         // Modify the response data here (e.g., parse, transform)
         return response;
     }, (error) => {
