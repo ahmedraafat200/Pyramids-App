@@ -1,0 +1,49 @@
+{
+  "version" : "1.2",
+  "profiles" : [ {
+    "id" : "d554da69-f8a4-4243-add4-047b409bc89e",
+    "name" : "React-i18n",
+    "keyNamingPattern" : "CAMEL_CASE_PATTERN",
+    "sink" : {
+      "id" : "13c1210a-e826-4165-9d56-94f08bbe4a1d",
+      "type" : "namespaced",
+      "translationsDirectory" : "$PROJECT_DIR$/locales",
+      "fileType" : "json",
+      "defaultLocale" : "en",
+      "namespaces" : [ "messages" ],
+      "outputFilenameTemplate" : "%locale%.json",
+      "nestingType" : "DISABLED",
+      "placeholderFormatterName" : "I18NEXT"
+    },
+    "sources" : [ {
+      "id" : "e8e84cf4-1187-47b4-a3f2-16844872a182",
+      "type" : "js",
+      "scopeName" : "Project Files",
+      "scopePattern" : "",
+      "defaultReplacementTemplate" : "t('%namespace%:%key%', %map%)",
+      "recognizedReplacementTemplates" : [ ],
+      "skipDefaultNamespace" : true
+    }, {
+      "id" : "790ea951-7237-4dcb-92f6-b7b9ae30d5e2",
+      "type" : "jsx",
+      "scopeName" : "Project Files",
+      "scopePattern" : "",
+      "defaultReplacementTemplate" : "t('%namespace%:%key%', %map%)",
+      "attributeReplacementTemplate" : "",
+      "inlineTagsReplacementTemplate" : "",
+      "recognizedReplacementTemplates" : [ ],
+      "inlineTagNames" : [ "a", "abbr", "acronym", "b", "bdi", "bdo", "big", "br", "cite", "code", "data", "del", "dfn", "em", "i", "img", "input", "ins", "kbd", "label", "mark", "meter", "output", "progress", "q", "ruby", "s", "samp", "slot", "small", "span", "strong", "sub", "sup", "time", "u", "tt", "var", "wbr" ],
+      "translatableAttributeNames" : [ "title", "alt", "placeholder", "label", "aria-label" ],
+      "skipDefaultNamespace" : true,
+      "inlineTagHandler" : "I18NEXT"
+    } ]
+  } ],
+  "ignores" : {
+    "valuesInProject" : [ "use strict" ],
+    "valuesInFile" : { },
+    "filesInProject" : [ ],
+    "unignoredFunctionNames" : [ ],
+    "unignoredFunctionArguments" : { },
+    "ignoredArrayKeys" : [ "class", "selector", "template", "middleware", "layout", "el", "component", "type", "name", "id", "key", "sql", "query", "dateFormat", "date", "condition" ]
+  }
+}

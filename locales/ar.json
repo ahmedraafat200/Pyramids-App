@@ -1,0 +1,10 @@
+{
+  "login": "تسجيل الدخول",
+  "loginByCode": "تسجيل بالكود التعريفي",
+  "resetPassword": "نسيت كلمة المرور",
+  "dontHaveAnAccount": "ليس لديك حساب؟",
+  "signup": "سجل الان",
+  "enterEmail": "ادخل البريد الالكتروني",
+  "enterPassword": "ادخل كلمة السر",
+  "language": "English"
+}

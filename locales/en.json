@@ -1,0 +1,10 @@
+{
+  "login": "Login",
+  "loginByCode": "Login By Code",
+  "resetPassword": "Reset password",
+  "dontHaveAnAccount": "Don't have an account?",
+  "signup": "Signup",
+  "enterEmail": "Enter Email",
+  "enterPassword": "Enter Password",
+  "language": "العربية"
+}
