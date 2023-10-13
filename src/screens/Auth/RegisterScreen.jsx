@@ -18,17 +18,19 @@ import * as yup from "yup";
 import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
 import Steps from "../../components/Steps";
 import userImage from "../../../assets/user.png";
+import axiosInstance from "../../axiosInstance";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const registerValidationSchema = yup.object().shape({
     first_name: yup
         .string()
-        .required('Project is required'),
+        .required('first_name is required'),
     last_name: yup
         .string()
-        .required('Unit is required'),
+        .required('last_name is required'),
     email: yup
         .string()
-        .required('Mobile is required')
+        .required('email is required')
         .email('Invalid email'),
     confirm_email: yup.string()
         .oneOf([yup.ref('email'), null], 'Emails must match'),
@@ -44,11 +46,46 @@ const registerValidationSchema = yup.object().shape({
         .required('Phone number is required'),
 });
 
-const RegisterScreen = () => {
+const RegisterScreen = ({route, navigation}) => {
     const {t} = useTranslation();
+    const [isLoading, setIsLoading] = useState(false)
     const [hidePass, setHidePass] = useState(true);
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
+
+    function registerOwner(inputData) {
+        setIsLoading(true);
+        let formData = new FormData();
+        inputData = {
+            ...inputData,
+            ...route.params.validationData
+        }
+        Object.keys(inputData).forEach(fieldName => {
+            formData.append(fieldName, inputData[fieldName]);
+        })
+        formData.append('role', 'owner');
+
+        let uriParts = selectedImage.split('.');
+        let fileType = uriParts[uriParts.length - 1];
+
+        formData.append('userPhoto', selectedImage, `photo.${fileType}`);
+        formData.append('token', '');
+        console.log(formData, 'formData');
+        axiosInstance.post(`/register_owner.php`, formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        })
+            .then(response => {
+                console.log(response.data, 'response');
+                setIsLoading(false);
+                if (response.data.status === 'SUCCESS'){
+                    navigation.navigate('Login');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                setIsLoading(false);
+            })
+    }
 
     useEffect(() => {
         (async () => {
@@ -69,8 +106,6 @@ const RegisterScreen = () => {
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
         }
@@ -80,12 +115,13 @@ const RegisterScreen = () => {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
         className="flex-1">
+            {/*<Spinner visible={isLoading}/>*/}
             <Steps classNames="pt-10 bg-white" step={2} totalSteps={2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <Formik
                         validationSchema={registerValidationSchema}
                         initialValues={{first_name: '', last_name: '', email: '', phone: '', password: ''}}
-                        onSubmit={values => console.log(values)}
+                        onSubmit={values => registerOwner(values)}
                     >
                         {({
                               handleChange,
@@ -96,7 +132,7 @@ const RegisterScreen = () => {
                               isValid,
                           }) => (
                             <View className="flex-1 justify-between px-10 items-center bg-white">
-                                <Text className='text-2xl font-bold m-6 text-slate-900'>Personal Information</Text>
+                                <Text className='text-2xl font-bold m-4 text-slate-900'>Personal Information</Text>
 
                                 <View className="flex flex-col space-y-4 w-full">
                                     <View
@@ -256,11 +292,10 @@ const RegisterScreen = () => {
                                     className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
                                     onPress={() => {
                                         handleSubmit()
-                                        // login(username, password)
                                     }}
                                 >
                                     <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>Proceed</Text>
+                                        <Text className='text-white text-base font-medium'>Submit</Text>
                                     </View>
                                 </Pressable>
                             </View>

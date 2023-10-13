@@ -26,6 +26,7 @@ const registerValidationSchema = yup.object().shape({
 
 const RegisterValidationScreen = ({route, navigation}) => {
     const {t} = useTranslation();
+    const ownerData = route.params.ownerData;
     const [isLoading, setIsLoading] = useState(false)
     const [projectItems, setProjectItems] = useState([
         {label: 'Apple', value: 'apple'},
@@ -47,7 +48,9 @@ const RegisterValidationScreen = ({route, navigation}) => {
         })
             .then(response => {
                 setIsLoading(false);
-                navigation.navigate('Register')
+                navigation.navigate('Register', {
+                    validationData: inputData,
+                })
             })
             .catch(error => {
                 // console.log(error);
@@ -60,11 +63,11 @@ const RegisterValidationScreen = ({route, navigation}) => {
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={1} totalSteps={2}/>
+            <Steps classNames="pt-10 bg-white" step={1} totalSteps={ownerData ? 3 : 2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <Formik
                     validationSchema={registerValidationSchema}
-                    initialValues={{project: '', unit: '', national_id: ''}}
+                    initialValues={{project: ownerData.project ?? '', unit: ownerData.unit ?? '', national_id: ''}}
                     onSubmit={values => validateOwner(values)}
                 >
                     {({
@@ -76,28 +79,55 @@ const RegisterValidationScreen = ({route, navigation}) => {
                           isValid,
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-6 text-slate-900'>Owner Validation</Text>
+                            <Text className='text-2xl font-bold m-4 text-slate-900'>Owner Validation</Text>
                             <View className="flex flex-col space-y-4 w-full">
-
+                                { ownerData ?
                                 <View>
-                                    <DropDownFormik
-                                        name="project"
-                                        placeholder="Select your project"
-                                        items={projectItems}
+                                    <TextInput
+                                        className='bg-white border border-black rounded-lg h-12 px-4'
+                                        name="owner_name"
+                                        value={ownerData.name}
+                                        editable={!ownerData}
                                     />
+                                </View> : null
+                                }
+                                <View>
+                                    {ownerData ?
+                                            <TextInput
+                                                className='bg-white border border-black rounded-lg h-12 px-4'
+                                                name="project"
+                                                onChangeText={handleChange('project')}
+                                                onBlur={handleBlur('project')}
+                                                value={values.project}
+                                                editable={!ownerData}
+                                            /> :
+                                        <DropDownFormik
+                                            name="project"
+                                            placeholder="Select your project"
+                                            items={projectItems}
+                                        /> }
                                     {errors.project &&
                                         <Text className='px-4'
-                                              style={{fontSize: 10, color: 'red'}}>{errors.project}</Text>
+                                        style={{fontSize: 10, color: 'red'}}>{errors.project}</Text>
                                     }
                                 </View>
 
                                 <View>
+                                    {ownerData ?
+                                        <TextInput
+                                            className='bg-white border border-black rounded-lg h-12 px-4'
+                                            name="unit"
+                                            onChangeText={handleChange('unit')}
+                                            onBlur={handleBlur('unit')}
+                                            value={values.unit}
+                                            editable={!ownerData}
+                                        /> :
                                     <DropDownFormik
                                         name="unit"
                                         placeholder="Select your unit"
                                         items={unitItems}
                                         zIndex={50}
-                                    />
+                                    /> }
                                     {errors.unit &&
                                         <Text className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.unit}</Text>

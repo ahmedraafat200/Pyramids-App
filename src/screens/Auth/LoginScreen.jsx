@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import * as Updates from "expo-updates";
 import * as yup from 'yup';
 import {Formik} from "formik";
+import Spinner from "react-native-loading-spinner-overlay/src";
 
 const loginValidationSchema = yup.object().shape({
     email: yup
@@ -17,19 +18,17 @@ const loginValidationSchema = yup.object().shape({
     password: yup
         .string()
         .required('Password is required')
-        .min(8, 'Password must contain at least 8 characters'),
+        .min(6, 'Password must contain at least 8 characters'),
 });
 
 
 const LoginScreen = ({route, navigation}) => {
     const {t} = useTranslation();
-    // const [username, setUsername] = useState(null)
-    // const [password, setPassword] = useState(null)
     const {isLoading, login} = useContext(AuthContext)
 
     return (
         <SafeAreaView className='flex-1 items-center bg-white'>
-            {/*<Spinner visible={isLoading} />*/}
+            <Spinner visible={isLoading} />
             <View className='p-10 w-full'>
                 <View className='items-center h-52  py-10'>
                     <Image className={'flex-1 w-full'}

@@ -3,6 +3,7 @@ import axios from "axios";
 import {BASE_URL} from "../config";
 import Toast from "react-native-toast-message";
 import * as SecureStore from "expo-secure-store";
+import axiosInstance from "../axiosInstance";
 
 export const AuthContext = createContext();
 
@@ -14,19 +15,15 @@ export const AuthProvider = ({children, navigation}) => {
     const login = (username, password) => {
         setIsLoading(true);
 
-        axios.post(`${BASE_URL}/student/auth/login`, {
-            username, password
-        }).then(res => {
+        let formData = new FormData();
+        formData.append('email', username);
+        formData.append('password', password);
+        axiosInstance.post(`login.php`, formData).then(res => {
             let user = res.data;
             setUser(user);
             SecureStore.setItemAsync('user', JSON.stringify(user));
             setIsLoading(false);
         }).catch(e => {
-            Toast.show({
-                type: 'error',
-                text1: 'Login Failed',
-                text2: e.response.data.error
-            });
             setIsLoading(false)
         })
     };

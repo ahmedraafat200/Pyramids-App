@@ -1,8 +1,13 @@
 import React, {useContext} from "react";
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+    createDrawerNavigator,
+    DrawerContentScrollView,
+    DrawerItemList,
+} from '@react-navigation/drawer';
 import {AuthContext} from "../context/AuthContext";
-import {Ionicons} from "@expo/vector-icons";
+import {Ionicons, SimpleLineIcons} from "@expo/vector-icons";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
@@ -14,48 +19,105 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RegisterScreen from "../screens/Auth/RegisterScreen";
 import RegisterValidationScreen from "../screens/Auth/RegisterValidationScreen";
+import CodeLoginScreen from "../screens/Auth/CodeLoginScreen";
+import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
 
-
-// Screen Names
-const homeName = 'Home';
-const profileName = 'Profile';
-
-// const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
-const TabNavigator = () => {
-    const insets = useSafeAreaInsets();
+const CustomDrawer = props => {
+    const {user} = useContext(AuthContext);
+    return (
+        <View style={{ flex: 1 }}>
+            <DrawerContentScrollView {...props}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: 20,
+                        backgroundColor: '#f6f6f6',
+                        marginBottom: 20,
+                    }}
+                >
+                    <View>
+                        <Text className="capitalize text-base font-medium">{user.first_name + ' ' + user.last_name}</Text>
+                        <Text className="capitalize text-xs">{user.email}</Text>
+                    </View>
+                    <Image
+                        source={{
+                            uri: user.userPhoto,
+                        }}
+                        resizeMode="contain"
+                        style={{ width: 60, height: 60, borderRadius: 30 }}
+                    />
+                </View>
+                <DrawerItemList {...props} />
+            </DrawerContentScrollView>
+            <TouchableOpacity
+                style={{
+                    position: 'absolute',
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    backgroundColor: '#f6f6f6',
+                    padding: 20,
+                    alignItems: 'center'
+                }}
+            >
+                <Text className="text-base font-medium">Log Out</Text>
+            </TouchableOpacity>
+        </View>
+    );
+};
+
+const DrawerNavigator = () => {
+    // const insets = useSafeAreaInsets();
 
     return (
-        <></>
-        // <Tab.Navigator
-        //     initialRouteName={homeName}
-        //     screenOptions={{
-        //         tabBarLabelStyle: {paddingBottom: 6, fontSize: 10},
-        //         tabBarStyle: {padding: 10, height: 60 + insets.bottom}
-        //     }}
-        // >
-        //     <Tab.Screen
-        //         name={homeName}
-        //         component={HomeScreen}
-        //         options={{
-        //             tabBarIcon: ({focused, color, size}) => {
-        //                 let iconName = focused ? 'home' : 'home-outline';
-        //                 return <Ionicons name={iconName} size={size} color={color}/>
-        //             }
-        //         }}
-        //     />
-        //     <Tab.Screen
-        //         name={profileName}
-        //         component={ProfileScreen}
-        //         options={{
-        //             tabBarIcon: ({focused, color, size}) => {
-        //                 let iconName = focused ? 'person' : 'person-outline';
-        //                 return <Ionicons name={iconName} size={size} color={color}/>
-        //             }
-        //         }}
-        //     />
-        // </Tab.Navigator>
+        <Drawer.Navigator
+            drawerContent={(props) => <CustomDrawer {...props} />}
+            screenOptions={{
+                drawerStyle: {
+                    width: Dimensions.get('window').width / 1.6,
+                },
+            }}
+            initialRouteName={'Home'}
+        >
+            <Drawer.Screen
+                name={'Home'}
+                component={HomeScreen}
+                options={{
+                    title: 'Home',
+                    drawerIcon: ({focused, color, size}) => (
+                        <Ionicons
+                            name="md-home" size={size} color={color}
+                        />
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name={'Profile'}
+                component={ProfileScreen}
+                options={{
+                    title: 'Profile',
+                    drawerIcon: ({focused, color, size}) => (
+                        <Ionicons name="ios-person-circle-outline" size={size} color={color} />
+
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name={'Invitations'}
+                component={ProfileScreen}
+                options={{
+                    title: 'Invitations',
+                    drawerIcon: ({focused, color, size}) => (
+                        <SimpleLineIcons name="envelope-letter" size={size} color={color} />
+                    ),
+                }}
+            />
+        </Drawer.Navigator>
     )
 }
 
@@ -73,8 +135,8 @@ const Navigation = () => {
                     />
                 ) : user ? (
                     <Stack.Screen
-                        name={"Tabs"}
-                        component={TabNavigator}
+                        name={"Drawer"}
+                        component={DrawerNavigator}
                         options={{headerShown: false}}
                     />
                 ) : (
@@ -82,6 +144,11 @@ const Navigation = () => {
                         <Stack.Screen
                             name="Login"
                             component={LoginScreen}
+                            options={{headerShown: false}}
+                        />
+                        <Stack.Screen
+                            name="LoginByCode"
+                            component={CodeLoginScreen}
                             options={{headerShown: false}}
                         />
                         <Stack.Screen

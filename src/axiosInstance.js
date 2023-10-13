@@ -9,11 +9,12 @@ const axiosInstance = axios.create({
 // Response interceptor
 axiosInstance.interceptors.response.use(
     (response) => {
-        console.log(response.data, 'interceptor')
-        Toast.show({
-            type: response.data.status.toLowerCase(),
-            text1: response.data.info
-        });
+        if (response.data.info){
+            Toast.show({
+                type: response.data.status === 'ERROR' ? 'error' : 'success',
+                text1: response.data.info
+            });
+        }
         // Modify the response data here (e.g., parse, transform)
         return response;
     }, (error) => {
