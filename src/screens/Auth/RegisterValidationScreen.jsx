@@ -26,7 +26,7 @@ const registerValidationSchema = yup.object().shape({
 
 const RegisterValidationScreen = ({route, navigation}) => {
     const {t} = useTranslation();
-    const ownerData = route.params.ownerData;
+    const ownerData = route.params ? route.params.ownerData : {};
     const [isLoading, setIsLoading] = useState(false)
     const [projectItems, setProjectItems] = useState([
         {label: 'Apple', value: 'apple'},
@@ -81,7 +81,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                         <View className="flex-1 justify-between px-10 items-center bg-white">
                             <Text className='text-2xl font-bold m-4 text-slate-900'>Owner Validation</Text>
                             <View className="flex flex-col space-y-4 w-full">
-                                { ownerData ?
+                                { ownerData.name ?
                                 <View>
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
@@ -92,7 +92,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                 </View> : null
                                 }
                                 <View>
-                                    {ownerData ?
+                                    {ownerData.project ?
                                             <TextInput
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="project"
@@ -113,7 +113,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                 </View>
 
                                 <View>
-                                    {ownerData ?
+                                    {ownerData.unit ?
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="unit"

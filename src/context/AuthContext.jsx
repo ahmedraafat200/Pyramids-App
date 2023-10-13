@@ -19,9 +19,11 @@ export const AuthProvider = ({children, navigation}) => {
         formData.append('email', username);
         formData.append('password', password);
         axiosInstance.post(`login.php`, formData).then(res => {
-            let user = res.data;
-            setUser(user);
-            SecureStore.setItemAsync('user', JSON.stringify(user));
+            if (res.data.status === 'OK'){
+                let user = res.data;
+                setUser(user);
+                SecureStore.setItemAsync('user', JSON.stringify(user));
+            }
             setIsLoading(false);
         }).catch(e => {
             setIsLoading(false)
@@ -30,20 +32,22 @@ export const AuthProvider = ({children, navigation}) => {
 
     const logout = () => {
         setIsLoading(true);
+        SecureStore.deleteItemAsync('user');
+        setUser(null);
+        setIsLoading(false);
 
-        axios.post(`${BASE_URL}/student/auth/logout`,
-            {},
-            {
-                headers: {Authorization: `Bearer ${user.access_token}`}
-            }).then(res => {
-            setIsLoading(false);
-        }).catch(e => {
-            setIsLoading(false);
-        }).finally(() => {
-            SecureStore.deleteItemAsync('user');
-            setUser(null);
-        })
-
+        // axios.post(`${BASE_URL}/student/auth/logout`,
+        //     {},
+        //     {
+        //         headers: {Authorization: `Bearer ${user.access_token}`}
+        //     }).then(res => {
+        //     setIsLoading(false);
+        // }).catch(e => {
+        //     setIsLoading(false);
+        // }).finally(() => {
+        //     SecureStore.deleteItemAsync('user');
+        //     setUser(null);
+        // })
     };
 
     const isLoggedIn = () => {

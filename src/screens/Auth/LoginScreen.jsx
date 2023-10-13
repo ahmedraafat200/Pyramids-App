@@ -85,7 +85,9 @@ const LoginScreen = ({route, navigation}) => {
                                 <Pressable>
                                     <Text className='text-black font-bold'>{t('loginByCode')}</Text>
                                 </Pressable>
-                                <Pressable>
+                                <Pressable
+                                onPress={() => {navigation.navigate('ResetPassword')}}
+                                >
                                     <Text className='text-black font-bold'>{t('resetPassword')}</Text>
                                 </Pressable>
                             </View>

@@ -78,7 +78,7 @@ const HomeScreen = () => {
                     <Text className='text-base'>
                         {'Welcome '}
                     </Text>
-                    <Text className='text-lg text-black font-bold'>
+                    <Text className='text-lg text-black font-bold capitalize'>
                         {user.first_name}
                     </Text>
                     <View className='ml-auto'>

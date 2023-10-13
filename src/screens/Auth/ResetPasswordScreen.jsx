@@ -9,40 +9,41 @@ import Steps from "../../components/Steps";
 import {Formik} from "formik";
 import DropDownFormik from "../../components/DropDownFormik";
 import * as yup from "yup";
+import {EvilIcons, MaterialCommunityIcons} from "@expo/vector-icons";
 
 const codeValidationSchema = yup.object().shape({
-    code: yup
-        .number()
-        .required('Code is required'),
+    email: yup
+        .string()
+        .required('Email is required')
+        .email('Invalid email'),
 });
 
-const CodeLoginScreen = ({route, navigation}) => {
+const ResetPasswordScreen = ({route, navigation}) => {
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false)
 
-    function validateCode(inputData) {
+    function getOtp(inputData) {
         setIsLoading(true);
         let formData = new FormData();
         Object.keys(inputData).forEach(fieldName => {
             formData.append(fieldName, inputData[fieldName]);
         })
-        axiosInstance.post(`/login_with_code.php`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
+        axiosInstance.post(`/forgot_password_mail_check_code_send.php`, formData, {
+            headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
                 setIsLoading(false);
-                // if (response.data.status === 'OK'){
-                    navigation.navigate('RegisterValidation', {
-                        ownerData: {
-                            'name' : 'Ahmed Raafat',
-                            'unit' : 'Test',
-                            'project' : 'Test',
-                        }
+                console.log(response.data);
+                if (response.data.status === 'OK') {
+                    navigation.navigate('OtpVerification', {
+                        'userId': response.data.userId,
+                        'role': response.data.role,
+                        'otp': response.data.v_code,
                     });
-                // }
+                }
             })
             .catch(error => {
-                console.log(error);
+
                 setIsLoading(false);
             })
     }
@@ -56,8 +57,8 @@ const CodeLoginScreen = ({route, navigation}) => {
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <Formik
                     validationSchema={codeValidationSchema}
-                    initialValues={{code: ''}}
-                    onSubmit={values => validateCode(values)}
+                    initialValues={{email: ''}}
+                    onSubmit={values => getOtp(values)}
                 >
                     {({
                           handleChange,
@@ -68,22 +69,26 @@ const CodeLoginScreen = ({route, navigation}) => {
                           isValid,
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-4 text-slate-900'>Code Validation</Text>
-                            <View className="flex flex-col space-y-4 w-full">
-                                <View>
+                            <View className="items-center w-full mt-8">
+                                <View className="rounded-full border-blue-500 border bg-blue-600 p-4">
+                                    <MaterialCommunityIcons name="lock-outline" size={80} color="white"/>
+                                </View>
+                                <Text className='text-2xl font-bold m-4 text-slate-900'>Email Verification</Text>
+                                <Text className='text-base m-2 text-slate-900 text-center'>A verification code will be
+                                    sent your email</Text>
+                                <View className="flex-1 w-full mt-4">
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
-                                        name="code"
-                                        placeholder="Code"
+                                        name="email"
+                                        placeholder="Email"
                                         placeholderTextColor="#000"
-                                        onChangeText={handleChange('code')}
-                                        onBlur={handleBlur('code')}
-                                        value={values.code}
-                                        keyboardType="numeric"
+                                        onChangeText={handleChange('email')}
+                                        onBlur={handleBlur('email')}
+                                        value={values.email}
                                     />
-                                    {errors.code &&
+                                    {errors.email &&
                                         <Text className='px-4'
-                                              style={{fontSize: 10, color: 'red'}}>{errors.code}</Text>
+                                              style={{fontSize: 10, color: 'red'}}>{errors.email}</Text>
                                     }
                                 </View>
                             </View>
@@ -106,4 +111,4 @@ const CodeLoginScreen = ({route, navigation}) => {
     );
 };
 
-export default CodeLoginScreen;
+export default ResetPasswordScreen;

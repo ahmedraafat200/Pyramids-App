@@ -24,13 +24,13 @@ import Spinner from "react-native-loading-spinner-overlay";
 const registerValidationSchema = yup.object().shape({
     first_name: yup
         .string()
-        .required('first_name is required'),
+        .required('First name is required'),
     last_name: yup
         .string()
-        .required('last_name is required'),
+        .required('Last name is required'),
     email: yup
         .string()
-        .required('email is required')
+        .required('Email is required')
         .email('Invalid email'),
     confirm_email: yup.string()
         .oneOf([yup.ref('email'), null], 'Emails must match'),
@@ -64,20 +64,23 @@ const RegisterScreen = ({route, navigation}) => {
             formData.append(fieldName, inputData[fieldName]);
         })
         formData.append('role', 'owner');
-
-        let uriParts = selectedImage.split('.');
-        let fileType = uriParts[uriParts.length - 1];
-
-        formData.append('userPhoto', selectedImage, `photo.${fileType}`);
         formData.append('token', '');
-        console.log(formData, 'formData');
+
+        const fileName = selectedImage.split('/').pop();
+        const fileType = fileName.split('.').pop();
+
+        formData.append('userPhoto', {
+            uri: selectedImage,
+            name: fileName,
+            type: `image/${fileType}`
+        });
+
         axiosInstance.post(`/register_owner.php`, formData, {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
-                console.log(response.data, 'response');
                 setIsLoading(false);
-                if (response.data.status === 'SUCCESS'){
+                if (response.data.status === 'OK'){
                     navigation.navigate('Login');
                 }
             })
@@ -103,7 +106,7 @@ const RegisterScreen = ({route, navigation}) => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 4],
-            quality: 1,
+            quality: 0.2,
         });
 
         if (!result.canceled) {
@@ -115,7 +118,7 @@ const RegisterScreen = ({route, navigation}) => {
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
         className="flex-1">
-            {/*<Spinner visible={isLoading}/>*/}
+            <Spinner visible={isLoading}/>
             <Steps classNames="pt-10 bg-white" step={2} totalSteps={2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <Formik

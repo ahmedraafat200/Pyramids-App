@@ -1,14 +1,14 @@
 import React, {useContext} from "react";
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
     DrawerItemList,
 } from '@react-navigation/drawer';
 import {AuthContext} from "../context/AuthContext";
-import {Ionicons, SimpleLineIcons} from "@expo/vector-icons";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {Ionicons, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-icons";
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 
 import SplashScreen from "../screens/SplashScreen";
@@ -21,14 +21,17 @@ import RegisterScreen from "../screens/Auth/RegisterScreen";
 import RegisterValidationScreen from "../screens/Auth/RegisterValidationScreen";
 import CodeLoginScreen from "../screens/Auth/CodeLoginScreen";
 import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
+import ResetPasswordScreen from "../screens/Auth/ResetPasswordScreen";
+import OtpVerificationScreen from "../screens/Auth/OtpVerificationScreen";
+import ChangePasswordScreen from "../screens/Auth/ChangePasswordScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 const CustomDrawer = props => {
-    const {user} = useContext(AuthContext);
+    const {user, logout} = useContext(AuthContext);
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
             <DrawerContentScrollView {...props}>
                 <View
                     style={{
@@ -41,7 +44,8 @@ const CustomDrawer = props => {
                     }}
                 >
                     <View>
-                        <Text className="capitalize text-base font-medium">{user.first_name + ' ' + user.last_name}</Text>
+                        <Text
+                            className="capitalize text-base font-medium">{user.first_name + ' ' + user.last_name}</Text>
                         <Text className="capitalize text-xs">{user.email}</Text>
                     </View>
                     <Image
@@ -49,7 +53,7 @@ const CustomDrawer = props => {
                             uri: user.userPhoto,
                         }}
                         resizeMode="contain"
-                        style={{ width: 60, height: 60, borderRadius: 30 }}
+                        style={{width: 60, height: 60, borderRadius: 30}}
                     />
                 </View>
                 <DrawerItemList {...props} />
@@ -64,6 +68,7 @@ const CustomDrawer = props => {
                     padding: 20,
                     alignItems: 'center'
                 }}
+                onPress={() => logout()}
             >
                 <Text className="text-base font-medium">Log Out</Text>
             </TouchableOpacity>
@@ -97,25 +102,37 @@ const DrawerNavigator = () => {
                 }}
             />
             <Drawer.Screen
-                name={'Profile'}
-                component={ProfileScreen}
-                options={{
-                    title: 'Profile',
-                    drawerIcon: ({focused, color, size}) => (
-                        <Ionicons name="ios-person-circle-outline" size={size} color={color} />
-
-                    ),
-                }}
-            />
-            <Drawer.Screen
                 name={'Invitations'}
                 component={ProfileScreen}
                 options={{
                     title: 'Invitations',
                     drawerIcon: ({focused, color, size}) => (
-                        <SimpleLineIcons name="envelope-letter" size={size} color={color} />
+                        <SimpleLineIcons name="envelope-letter" size={size} color={color}/>
                     ),
                 }}
+            />
+            <Drawer.Screen
+                name={'Profile'}
+                component={ProfileScreen}
+                options={{
+                    title: 'Profile',
+                    drawerIcon: ({focused, color, size}) => (
+                        <Ionicons name="ios-person-circle-outline" size={size} color={color}/>
+
+                    ),
+                }}
+            />
+            <Drawer.Screen
+                name="ChangePassword"
+                component={ChangePasswordScreen}
+                options={
+                    {
+                        headerShown: false,
+                        title: 'Change Password',
+                        drawerIcon: ({focused, color, size}) => (
+                            <MaterialCommunityIcons name="lock-reset" size={size} color={color} />
+                        ),
+                    }}
             />
         </Drawer.Navigator>
     )
@@ -126,44 +143,61 @@ const Navigation = () => {
 
 
     return (
-            <Stack.Navigator>
-                {splashLoading ? (
-                    <Stack.Screen
-                        name="Splash Screen"
-                        component={SplashScreen}
-                        options={{headerShown: false}}
-                    />
-                ) : user ? (
+        <Stack.Navigator>
+            {splashLoading ? (
+                <Stack.Screen
+                    name="Splash Screen"
+                    component={SplashScreen}
+                    options={{headerShown: false}}
+                />
+            ) : user ? (
+                <>
                     <Stack.Screen
                         name={"Drawer"}
                         component={DrawerNavigator}
                         options={{headerShown: false}}
                     />
-                ) : (
-                    <>
-                        <Stack.Screen
-                            name="Login"
-                            component={LoginScreen}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="LoginByCode"
-                            component={CodeLoginScreen}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="RegisterValidation"
-                            component={RegisterValidationScreen}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="Register"
-                            component={RegisterScreen}
-                            options={{headerShown: false}}
-                        />
-                    </>
-                )}
-            </Stack.Navigator>
+                </>
+            ) : (
+                <>
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="LoginByCode"
+                        component={CodeLoginScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="RegisterValidation"
+                        component={RegisterValidationScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="ResetPassword"
+                        component={ResetPasswordScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="OtpVerification"
+                        component={OtpVerificationScreen}
+                        options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name="ChangePassword"
+                        component={ChangePasswordScreen}
+                        options={{headerShown: false}}
+                    />
+                </>
+            )}
+        </Stack.Navigator>
     );
 };
 
