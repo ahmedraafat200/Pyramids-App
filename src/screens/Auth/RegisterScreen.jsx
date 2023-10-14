@@ -83,14 +83,12 @@ const RegisterScreen = ({route, navigation}) => {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
-                console.log(response)
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
                     navigation.navigate('Login');
                 }
             })
             .catch(error => {
-                console.log(error);
                 setIsLoading(false);
             })
     }
@@ -140,7 +138,7 @@ const RegisterScreen = ({route, navigation}) => {
                               isValid,
                           }) => (
                             <View className="flex-1 justify-between px-10 items-center bg-white">
-                                <Text className='text-2xl font-bold m-4 text-slate-900'>Personal Information</Text>
+                                <Text className='text-2xl font-bold m-4 text-slate-900'>{t('personalInformation')}</Text>
 
                                 <View className="flex flex-col space-y-4 w-full">
                                     <View
@@ -181,7 +179,7 @@ const RegisterScreen = ({route, navigation}) => {
                                             <TextInput
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="first_name"
-                                                placeholder="First Name"
+                                                placeholder={t('firstName')}
                                                 placeholderTextColor="#000"
                                                 onChangeText={handleChange('first_name')}
                                                 onBlur={handleBlur('first_name')}
@@ -196,7 +194,7 @@ const RegisterScreen = ({route, navigation}) => {
                                             <TextInput
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="last_name"
-                                                placeholder="Last name"
+                                                placeholder={t('lastName')}
                                                 placeholderTextColor="#000"
                                                 onChangeText={handleChange('last_name')}
                                                 onBlur={handleBlur('last_name')}
@@ -212,7 +210,7 @@ const RegisterScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="phone"
-                                            placeholder="Enter your phone number"
+                                            placeholder={t('enterYourPhoneNumber')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('phone')}
                                             onBlur={handleBlur('phone')}
@@ -228,7 +226,7 @@ const RegisterScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="email"
-                                            placeholder="Enter your email"
+                                            placeholder={t('enterYourEmail')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('email')}
                                             onBlur={handleBlur('email')}
@@ -243,7 +241,7 @@ const RegisterScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="confirm_email"
-                                            placeholder="Confirm email"
+                                            placeholder={t('confirmEmail')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('confirm_email')}
                                             onBlur={handleBlur('confirm_email')}
@@ -259,7 +257,7 @@ const RegisterScreen = ({route, navigation}) => {
                                             <TextInput
                                                 className='flex-1 bg-white border border-black rounded-lg h-12 px-4'
                                                 name="password"
-                                                placeholder="Enter your password"
+                                                placeholder={t('enterYourPassword')}
                                                 placeholderTextColor="#000"
                                                 onChangeText={handleChange('password')}
                                                 onBlur={handleBlur('password')}
@@ -282,7 +280,7 @@ const RegisterScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="confirm_password"
-                                            placeholder="Confirm password"
+                                            placeholder={t('confirmPassword')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('confirm_password')}
                                             onBlur={handleBlur('confirm_password')}
@@ -303,7 +301,7 @@ const RegisterScreen = ({route, navigation}) => {
                                     }}
                                 >
                                     <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>Submit</Text>
+                                        <Text className='text-white text-base font-medium'>{t('submit')}</Text>
                                     </View>
                                 </Pressable>
                             </View>

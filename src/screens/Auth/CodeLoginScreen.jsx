@@ -32,7 +32,6 @@ const CodeLoginScreen = ({route, navigation}) => {
             .then(response => {
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
-                    console.log(response.data)
                     navigation.navigate('RegisterValidation', {
                         ownerData: {
                             'name' : response.data.first_name + ' ' + response.data.last_name,
@@ -47,7 +46,6 @@ const CodeLoginScreen = ({route, navigation}) => {
                 }
             })
             .catch(error => {
-                console.log(error);
                 setIsLoading(false);
             })
     }
@@ -73,13 +71,13 @@ const CodeLoginScreen = ({route, navigation}) => {
                           isValid,
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-4 text-slate-900'>Code Validation</Text>
+                            <Text className='text-2xl font-bold m-4 text-slate-900'>{t('codeValidation')}</Text>
                             <View className="flex flex-col space-y-4 w-full">
                                 <View>
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="code"
-                                        placeholder="Code"
+                                        placeholder={t('code')}
                                         placeholderTextColor="#000"
                                         onChangeText={handleChange('code')}
                                         onBlur={handleBlur('code')}
@@ -100,7 +98,7 @@ const CodeLoginScreen = ({route, navigation}) => {
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>Proceed</Text>
+                                    <Text className='text-white text-base font-medium'>{t('proceed')}</Text>
                                 </View>
                             </Pressable>
                         </View>

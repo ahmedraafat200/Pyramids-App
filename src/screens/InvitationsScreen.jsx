@@ -22,11 +22,13 @@ import {StatusBar} from "expo-status-bar";
 import ViewShot from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import async from "async";
+import {useTranslation} from "react-i18next";
 
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const InvitationsScreen = ({route, navigation}) => {
+    const {t} = useTranslation();
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false)
     const [familyInvitations, setFamilyInvitations] = useState([])
@@ -44,7 +46,7 @@ const InvitationsScreen = ({route, navigation}) => {
 
     const shareInvitation = (code) => {
         Share.share({
-            message: `You can use this code to login and create your account, Code: ${code}`
+            message: t('youCanUseThisCodeToLoginAndCreateYourAccountCode', {code: code})
         })
     };
 
@@ -225,7 +227,7 @@ const InvitationsScreen = ({route, navigation}) => {
                             onPress={captureAndShareScreenshot}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>Share</Text>
+                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white" />
                             </View>
                         </Pressable>
@@ -267,7 +269,6 @@ const InvitationsScreen = ({route, navigation}) => {
 
 
     const handleSheetChanges = useCallback((index) => {
-        console.log('handleSheetChanges', index);
     }, []);
 
     const renderBackdrop = useCallback(
@@ -305,7 +306,6 @@ const InvitationsScreen = ({route, navigation}) => {
                 setIsLoading(false);
             })
             .catch(error => {
-                console.log(error)
                 setIsRefreshing(false)
                 setIsLoading(false);
             })

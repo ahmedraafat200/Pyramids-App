@@ -11,6 +11,7 @@ import {Ionicons, MaterialCommunityIcons, SimpleLineIcons} from "@expo/vector-ic
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 
+
 import SplashScreen from "../screens/SplashScreen";
 import LoginScreen from "../screens/Auth/LoginScreen";
 
@@ -20,7 +21,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import RegisterScreen from "../screens/Auth/RegisterScreen";
 import RegisterValidationScreen from "../screens/Auth/RegisterValidationScreen";
 import CodeLoginScreen from "../screens/Auth/CodeLoginScreen";
-import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, I18nManager, Image, Pressable, Text, TouchableOpacity, View} from "react-native";
 import ResetPasswordScreen from "../screens/Auth/ResetPasswordScreen";
 import OtpVerificationScreen from "../screens/Auth/OtpVerificationScreen";
 import ChangePasswordScreen from "../screens/Auth/ChangePasswordScreen";
@@ -28,11 +29,15 @@ import OneTimePassScreen from "../screens/OneTimePassScreen";
 import TimedPassScreen from "../screens/TimedPassScreen";
 import InvitationsScreen from "../screens/InvitationsScreen";
 import userImage from "../../assets/user.png";
+import i18next from "../../services/i18next";
+import * as Updates from "expo-updates";
+import {useTranslation} from "react-i18next";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 const CustomDrawer = props => {
+    const {t} = useTranslation();
     const {user, logout} = useContext(AuthContext);
     const profile = Image.resolveAssetSource(userImage).uri;
 
@@ -76,7 +81,7 @@ const CustomDrawer = props => {
                 }}
                 onPress={() => logout()}
             >
-                <Text className="text-base font-medium">Log Out</Text>
+                <Text className="text-base font-medium">{t('logOut')}</Text>
             </TouchableOpacity>
         </View>
     );

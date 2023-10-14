@@ -47,14 +47,12 @@ const ChangePasswordScreen = ({route, navigation}) => {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
-                console.log(response.data)
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
                     navigation.navigate('Login');
                 }
             })
             .catch(error => {
-                console.log(error)
                 setIsLoading(false);
             })
     }
@@ -70,14 +68,12 @@ const ChangePasswordScreen = ({route, navigation}) => {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
-                console.log(response.data)
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
                     navigation.navigate('Home');
                 }
             })
             .catch(error => {
-                console.log(error)
                 setIsLoading(false);
             })
     }
@@ -105,14 +101,14 @@ const ChangePasswordScreen = ({route, navigation}) => {
                           isValid,
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-4 text-slate-900'>Change Password</Text>
+                            <Text className='text-2xl font-bold m-4 text-slate-900'>{t('changePassword')}</Text>
                             <View className="flex flex-col space-y-4 w-full">
                                 <View>
                                     <View className="flex-row justify-center items-center">
                                         <TextInput
                                             className='flex-1 bg-white border border-black rounded-lg h-12 px-4'
                                             name="password"
-                                            placeholder="Enter your password"
+                                            placeholder={t('enterYourPassword')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('password')}
                                             onBlur={handleBlur('password')}
@@ -135,7 +131,7 @@ const ChangePasswordScreen = ({route, navigation}) => {
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="confirm_password"
-                                        placeholder="Confirm password"
+                                        placeholder={t('confirmPassword')}
                                         placeholderTextColor="#000"
                                         onChangeText={handleChange('confirm_password')}
                                         onBlur={handleBlur('confirm_password')}
@@ -156,7 +152,7 @@ const ChangePasswordScreen = ({route, navigation}) => {
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>Submit</Text>
+                                    <Text className='text-white text-base font-medium'>{t('submit')}</Text>
                                 </View>
                             </Pressable>
                         </View>

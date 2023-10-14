@@ -6,10 +6,12 @@ import {AntDesign, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons} from 
 import axiosInstance from "../axiosInstance";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {use} from "i18next";
+import {useTranslation} from "react-i18next";
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const HomeScreen = ({route, navigation}) => {
+    const {t} = useTranslation();
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false)
     const [accessData, setAccessData] = useState({})
@@ -24,14 +26,12 @@ const HomeScreen = ({route, navigation}) => {
             headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
-                console.log(response.data)
                 if (response.data.status === 'OK') {
                     navigation.navigate('Invitations')
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                console.log(error)
                 setIsLoading(false);
             })
     }
@@ -50,7 +50,6 @@ const HomeScreen = ({route, navigation}) => {
                 setAccessData(response.data.data);
             })
             .catch(error => {
-                // console.log(error);
                 setIsLoading(false);
             })
     }
@@ -69,7 +68,6 @@ const HomeScreen = ({route, navigation}) => {
     }, []);
 
     const handleSheetChanges = useCallback((index) => {
-        console.log('handleSheetChanges', index);
     }, []);
 
     const renderBackdrop = useCallback(
@@ -122,7 +120,7 @@ const HomeScreen = ({route, navigation}) => {
                                 <MaterialCommunityIcons name="cellphone-key" size={35} color="black"/>
                             </View>
                             <Text className='text-base font-medium '>
-                                My Access
+                                {t('myAccess')}
                             </Text>
                         </View>
                     </View>
@@ -140,7 +138,7 @@ const HomeScreen = ({route, navigation}) => {
                                 <SimpleLineIcons name="envelope-letter" size={34} color="black"/>
                             </View>
                             <Text className='text-base font-medium '>
-                                Invite
+                                {t('invite')}
                             </Text>
                         </View>
                     </View>
@@ -159,7 +157,7 @@ const HomeScreen = ({route, navigation}) => {
                                 <MaterialIcons name="insert-invitation" size={35} color="black"/>
                             </View>
                             <Text className='text-base font-medium '>
-                                Invitations
+                                {t('invitations')}
                             </Text>
                         </View>
                     </View>
@@ -208,7 +206,7 @@ const HomeScreen = ({route, navigation}) => {
                                     className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
                                 >
                                     <Text className='self-center text-base font-medium '>
-                                        Tenant
+                                        {t('tenant')}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
@@ -219,7 +217,7 @@ const HomeScreen = ({route, navigation}) => {
                                         className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
                                     >
                                         <Text className='self-center text-base font-medium '>
-                                            Family
+                                            {t('family')}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -230,7 +228,7 @@ const HomeScreen = ({route, navigation}) => {
                                     className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
                                 >
                                     <Text className='self-center text-base font-medium '>
-                                        One Time Pass
+                                        {t('oneTimePass')}
                                     </Text>
                                 </View>
                             </TouchableOpacity>

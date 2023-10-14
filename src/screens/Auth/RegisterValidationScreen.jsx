@@ -48,7 +48,6 @@ const RegisterValidationScreen = ({route, navigation}) => {
                 setUnitItems(units);
             })
             .catch(error => {
-                // console.log(error);
                 setIsLoading(false);
             })
     }
@@ -84,7 +83,6 @@ const RegisterValidationScreen = ({route, navigation}) => {
                     }
                 })
                 .catch(error => {
-                    // console.log(error);
                     setIsLoading(false);
                 })
         }
@@ -115,8 +113,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
                             <View className="flex flex-col space-y-4 w-full">
-                                <Text className='self-center text-2xl font-bold mt-4 mb-8 text-slate-900'>Owner
-                                    Validation</Text>
+                                <Text className='self-center text-2xl font-bold mt-4 mb-8 text-slate-900'>{t('ownerValidation')}</Text>
                                 {ownerData.name ?
                                     <View className="">
                                         <Image className="self-center"
@@ -150,7 +147,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                         /> :
                                         <DropDownFormik
                                             name="project"
-                                            placeholder="Select your project"
+                                            placeholder={t('selectYourProject')}
                                             items={projectItems}
                                         />}
                                     {errors.project &&
@@ -171,7 +168,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                         /> :
                                         <DropDownFormik
                                             name="unit"
-                                            placeholder="Select your unit"
+                                            placeholder={t('selectYourUnit')}
                                             items={unitItems}
                                             zIndex={50}
                                         />}
@@ -184,7 +181,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="national_id"
-                                        placeholder="Enter your national id"
+                                        placeholder={t('enterYourNationalId')}
                                         placeholderTextColor="#000"
                                         onChangeText={handleChange('national_id')}
                                         onBlur={handleBlur('national_id')}
@@ -205,7 +202,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>Proceed</Text>
+                                    <Text className='text-white text-base font-medium'>{t('proceed')}</Text>
                                 </View>
                             </Pressable>
                         </View>

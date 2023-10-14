@@ -47,14 +47,12 @@ const OneTimePassScreen = ({route, navigation}) => {
             headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
-                console.log(response.data)
                 if (response.data.status === 'OK') {
                     setCode(response.data);
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                console.log(error)
                 setIsLoading(false);
             })
     }
@@ -81,7 +79,7 @@ const OneTimePassScreen = ({route, navigation}) => {
                             onPress={captureAndShareScreenshot}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>Share</Text>
+                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white" />
                             </View>
                         </Pressable>
@@ -105,7 +103,7 @@ const OneTimePassScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="guest_name"
-                                            placeholder="Enter guest name"
+                                            placeholder={t('enterGuestName')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('guest_name')}
                                             onBlur={handleBlur('guest_name')}
@@ -120,7 +118,7 @@ const OneTimePassScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="guest_ride"
-                                            placeholder="Enter guest ride"
+                                            placeholder={t('enterGuestRide')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('guest_ride')}
                                             onBlur={handleBlur('guest_ride')}
@@ -140,7 +138,7 @@ const OneTimePassScreen = ({route, navigation}) => {
                                     }}
                                 >
                                     <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>Invite</Text>
+                                        <Text className='text-white text-base font-medium'>{t('invite')}</Text>
                                     </View>
                                 </Pressable>
                             </View>

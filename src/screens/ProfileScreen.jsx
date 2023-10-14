@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
     Button,
-    FlatList,
+    FlatList, I18nManager,
     Image,
     Platform,
     Pressable,
@@ -22,6 +22,7 @@ import {use} from "i18next";
 import userImage from "../../assets/user.png";
 import {StatusBar} from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
+import * as Updates from "expo-updates";
 
 const ProfileScreen = () => {
     const {t} = useTranslation();
@@ -57,7 +58,6 @@ const ProfileScreen = () => {
                 getUserData();
             })
             .catch(error => {
-                console.log(error);
                 setIsLoading(false);
             })
     }
@@ -76,7 +76,6 @@ const ProfileScreen = () => {
                 }
             })
             .catch(error => {
-                // console.log(error);
             })
     }
 
@@ -175,6 +174,19 @@ const ProfileScreen = () => {
                         </View>
                     </Pressable>
                 }
+            </View>
+            <View className="bg-black rounded-xl w-fit py-1 px-4">
+                <Pressable
+                    onPress={() => {
+                        i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
+                            .then(() => {
+                                I18nManager.allowRTL(i18next.language === 'ar');
+                                I18nManager.forceRTL(i18next.language === 'ar');
+                                Updates.reloadAsync();
+                            })
+                    }}>
+                    <Text className='text-white text-base font-medium'>{t('language')}</Text>
+                </Pressable>
             </View>
             <View className="flex flex-col w-full">
                 <FlatList

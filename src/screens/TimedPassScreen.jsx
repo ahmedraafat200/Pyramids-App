@@ -37,7 +37,7 @@ const TimedPassScreen = ({route, navigation}) => {
 
     const shareInvitation = () => {
         Share.share({
-            message: `You can use this code to login and create your tenant account, Code: ${code.code}`
+            message: t('youCanUseThisCodeToLoginAndCreateYourAccountCode', {code: code.code})
         })
     };
 
@@ -110,14 +110,12 @@ const TimedPassScreen = ({route, navigation}) => {
             headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
-                console.log(response.data)
                 if (response.data.status === 'OK') {
                     setCode(response.data);
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                console.log(error)
                 setIsLoading(false);
             })
     }
@@ -135,7 +133,7 @@ const TimedPassScreen = ({route, navigation}) => {
                             onPress={shareInvitation}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>Share</Text>
+                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white" />
                             </View>
                         </Pressable>
@@ -148,7 +146,7 @@ const TimedPassScreen = ({route, navigation}) => {
                                         <TextInput
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="rent_from"
-                                            placeholder="Enter start date"
+                                            placeholder={t('enterStartDate')}
                                             placeholderTextColor="#000"
                                             onChangeText={handleChange('rent_from')}
                                             onBlur={handleBlur('rent_from')}
@@ -176,7 +174,7 @@ const TimedPassScreen = ({route, navigation}) => {
                                             <TextInput
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="rent_to"
-                                                placeholder="Enter end date"
+                                                placeholder={t('enterEndDate')}
                                                 placeholderTextColor="#000"
                                                 onChangeText={handleChange('rent_to')}
                                                 onBlur={handleBlur('rent_to')}
@@ -207,7 +205,7 @@ const TimedPassScreen = ({route, navigation}) => {
                                     }}
                                 >
                                     <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>Invite</Text>
+                                        <Text className='text-white text-base font-medium'>{t('invite')}</Text>
                                     </View>
                                 </Pressable>
                             </View>

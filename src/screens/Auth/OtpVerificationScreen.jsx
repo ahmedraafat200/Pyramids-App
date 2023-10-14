@@ -23,7 +23,6 @@ const OtpVerification = ({route, navigation}) => {
     const [otpInput, setOtpInput] = useState("");
 
     const input = useRef(null);
-    console.log(route.params.otp, 'otp')
     const handleCellTextChange = async (text, i) => {
         if (i === 0) {
             const clippedText = await Clipboard.getStringAsync();
@@ -39,11 +38,10 @@ const OtpVerification = ({route, navigation}) => {
 
     function validateOtp(otpInput) {
         setIsLoading(true);
-        console.log(route.params.otp, otpInput);
         if (route.params.otp === otpInput){
             Toast.show({
                 type: 'success',
-                text1: 'Otp verified successfully'
+                text1: t('otpVerifiedSuccessfully')
             });
             navigation.navigate('ChangePassword', {
                 userData: {
@@ -54,7 +52,7 @@ const OtpVerification = ({route, navigation}) => {
         } else {
             Toast.show({
                 type: 'error',
-                text1: 'Otp verified failed'
+                text1: t('otpVerificationFailed')
             });
         }
         setIsLoading(false);
@@ -72,9 +70,8 @@ const OtpVerification = ({route, navigation}) => {
                         <View className="rounded-full border-blue-500 border bg-blue-600 p-4">
                             <MaterialCommunityIcons name="lock-open-variant-outline" size={80} color="white"/>
                         </View>
-                        <Text className='text-2xl font-bold m-4 text-slate-900'>OTP Verification</Text>
-                        <Text className='text-base m-2 text-slate-900 text-center'>Enter the code that you have received
-                            on your email</Text>
+                        <Text className='text-2xl font-bold m-4 text-slate-900'>{t('otpVerification')}</Text>
+                        <Text className='text-base m-2 text-slate-900 text-center'>{t('enterTheCodeThatYouHaveReceivedOnYourEmail')}</Text>
                         <View className="flex-1 w-full mt-4">
                             <OTPTextView
                                 ref={input}

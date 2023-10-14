@@ -33,7 +33,6 @@ const ResetPasswordScreen = ({route, navigation}) => {
         })
             .then(response => {
                 setIsLoading(false);
-                console.log(response.data);
                 if (response.data.status === 'OK') {
                     navigation.navigate('OtpVerification', {
                         'userId': response.data.userId,
@@ -73,14 +72,13 @@ const ResetPasswordScreen = ({route, navigation}) => {
                                 <View className="rounded-full border-blue-500 border bg-blue-600 p-4">
                                     <MaterialCommunityIcons name="lock-outline" size={80} color="white"/>
                                 </View>
-                                <Text className='text-2xl font-bold m-4 text-slate-900'>Email Verification</Text>
-                                <Text className='text-base m-2 text-slate-900 text-center'>A verification code will be
-                                    sent your email</Text>
+                                <Text className='text-2xl font-bold m-4 text-slate-900'>{t('emailVerification')}</Text>
+                                <Text className='text-base m-2 text-slate-900 text-center'>{t('aVerificationCodeWillBeSentYourEmail')}</Text>
                                 <View className="flex-1 w-full mt-4">
                                     <TextInput
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="email"
-                                        placeholder="Email"
+                                        placeholder={t('email')}
                                         placeholderTextColor="#000"
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
@@ -100,7 +98,7 @@ const ResetPasswordScreen = ({route, navigation}) => {
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>Proceed</Text>
+                                    <Text className='text-white text-base font-medium'>{t('proceed')}</Text>
                                 </View>
                             </Pressable>
                         </View>
