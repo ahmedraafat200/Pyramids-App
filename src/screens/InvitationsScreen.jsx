@@ -1,10 +1,11 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {
+    ActivityIndicator,
     Animated,
     Button,
     Dimensions,
     FlatList,
-    Image, Pressable, Share,
+    Image, Pressable, RefreshControl, Share,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -53,9 +54,9 @@ const InvitationsScreen = ({route, navigation}) => {
     const layout = useWindowDimensions();
     const [index, setIndex] = useState(0);
     const [routes] = useState([
-        {key: 'tenant', title: 'Tenant'},
-        {key: 'family', title: 'Family'},
-        {key: 'oneTime', title: 'One Time'},
+        {key: 'tenant', title: t('tenant')},
+        {key: 'family', title: t('family')},
+        {key: 'oneTime', title: t('oneTime')},
     ]);
 
     const renderTenant = ({item}) => (
@@ -70,31 +71,31 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-sm'>
-                                {'Generated At : '}
+                            <Text className='text-xs'>
+                                {t('generatedAt')}
                             </Text>
-                            <Text className='text-base text-black font-bold capitalize'>
+                            <Text className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                         <View className="flex-row items-center">
-                            <Text className='text-sm'>
-                                {'Active from '}
+                            <Text className='text-xs'>
+                                {t('activeFrom')}
                             </Text>
-                            <Text className='text-base text-black font-bold capitalize'>
+                            <Text className='text-sm text-black font-bold capitalize'>
                                 {item.from}
                             </Text>
-                            <Text className='text-sm'>
-                                {' to '}
+                            <Text className='text-xs'>
+                                 {t('to')}
                             </Text>
-                            <Text className='text-base text-black font-bold capitalize'>
+                            <Text className='text-sm text-black font-bold capitalize'>
                                 {item.to}
                             </Text>
                         </View>
                     </View>
                     <View className='ml-auto'>
                         <Text
-                            className="bg-gray-900 text-gray-100 py-2 px-4 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
+                            className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
             </View>
@@ -113,17 +114,17 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-sm'>
-                                {'Generated At : '}
+                            <Text className='text-xs'>
+                                {t('generatedAt')}
                             </Text>
-                            <Text className='text-base text-black font-bold capitalize'>
+                            <Text className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                     </View>
                     <View className='ml-auto'>
                         <Text
-                            className="bg-gray-900 text-gray-100 py-2 px-4 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
+                            className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
             </View>
@@ -143,27 +144,27 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 justify-between items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-sm'>
-                                {'Generated At : '}
+                            <Text className='text-xs'>
+                                {t('generatedAt')}
                             </Text>
-                            <Text className='text-base text-black font-bold capitalize'>
+                            <Text className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                         <View className="flex-row items-center justify-between">
                             <View className="flex-row items-center">
                                 <Text className='text-sm'>
-                                    {'Guest: '}
+                                    {t('guest')}
                                 </Text>
-                                <Text className='text-base text-black font-bold capitalize'>
+                                <Text className='text-sm text-black font-bold capitalize'>
                                     {item.guest_name}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">
-                                <Text className='text-sm'>
-                                    {'Ride: '}
+                                <Text className='text-xs'>
+                                    {t('ride')}
                                 </Text>
-                                <Text className='text-base text-black font-bold capitalize'>
+                                <Text className='text-sm text-black font-bold capitalize'>
                                     {item.guest_ride}
                                 </Text>
                             </View>
@@ -171,7 +172,7 @@ const InvitationsScreen = ({route, navigation}) => {
                     </View>
                     <View className="">
                         <Text
-                            className="bg-gray-900 text-gray-100 py-2 px-4 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
+                            className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
             </View>
@@ -184,6 +185,9 @@ const InvitationsScreen = ({route, navigation}) => {
                 data={tenantInvitations}
                 renderItem={renderTenant}
                 keyExtractor={item => item.invitationId}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('renter')} />
+                }
             />
         </View>
     );
@@ -194,6 +198,9 @@ const InvitationsScreen = ({route, navigation}) => {
                 data={familyInvitations}
                 renderItem={renderFamily}
                 keyExtractor={item => item.invitationId}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('family')} />
+                }
             />
         </View>
     );
@@ -204,6 +211,9 @@ const InvitationsScreen = ({route, navigation}) => {
                 data={oneTimeInvitations}
                 renderItem={renderOneTime}
                 keyExtractor={item => item.invitationId}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('oneTimePass')} />
+                }
             />
             <BottomSheetModalProvider>
                 <View className="flex-1 justify-center">

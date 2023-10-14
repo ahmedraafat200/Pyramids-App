@@ -26,14 +26,14 @@ import * as Updates from "expo-updates";
 
 const ProfileScreen = () => {
     const {t} = useTranslation();
-    const {user} = useContext(AuthContext);
+    const {user, setUser} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState(null)
     const [relatedData, setRelatedData] = useState({})
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
     const [updateProfile, setUpdateProfile] = useState(false)
-
+console.log(user);
     function updateProfilePicture() {
         setIsLoading(true);
         let formData = new FormData();
@@ -52,10 +52,10 @@ const ProfileScreen = () => {
         axiosInstance.post('/user_change_photo.php', formData, {
             headers: { "Content-Type": "multipart/form-data" }
         })
-            .then(async response => {
+            .then(response => {
+                setUser(response.data)
                 setIsLoading(false);
                 setUpdateProfile(false);
-                getUserData();
             })
             .catch(error => {
                 setIsLoading(false);
@@ -145,10 +145,13 @@ const ProfileScreen = () => {
 
     return (
         <View className="flex-1 px-10 items-center bg-white space-y-2 divide-y-2 divide-gray-400">
-            <View className="flex flex-col w-full items-center">
+            <Spinner visible={isLoading}/>
+            {userData &&
+                <>
+                <View className="flex flex-col w-full items-center">
                     <TouchableOpacity onPress={handleImageSelection}>
                         <Image
-                            source={{ uri: updateProfile ? selectedImage : userData.userPhoto}}
+                            source={{uri: updateProfile ? selectedImage : user.userPhoto}}
                             style={{
                                 height: 100,
                                 width: 100,
@@ -159,42 +162,45 @@ const ProfileScreen = () => {
                             }}
                         />
                     </TouchableOpacity>
-                <Text className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
-                <Text className="text-lg font-medium capitalize">{userData.email}</Text>
-                <Text className="text-lg font-normal capitalize">{userData.unit}</Text>
-                { updateProfile &&
-                    <Pressable
-                        className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
-                        onPress={() => {
-                            updateProfilePicture()
-                        }}
-                    >
-                        <View className='flex-1 flex items-center'>
-                            <Text className='text-white text-base font-medium'>Update Picture</Text>
-                        </View>
-                    </Pressable>
-                }
-            </View>
-            <View className="bg-black rounded-xl w-fit py-1 px-4">
+                    <Text
+                        className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
+                    <Text className="text-lg font-medium capitalize">{userData.email}</Text>
+                    <Text className="text-lg font-normal capitalize">{userData.unit}</Text>
+                    {updateProfile &&
+                        <Pressable
+                            className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
+                            onPress={() => {
+                                updateProfilePicture()
+                            }}
+                        >
+                            <View className='flex-1 flex items-center'>
+                                <Text className='text-white text-base font-medium'>{t('updatePicture')}</Text>
+                            </View>
+                        </Pressable>
+                    }
+                </View>
+                <View className="bg-black rounded-xl w-fit py-1 px-4">
                 <Pressable
-                    onPress={() => {
-                        i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                            .then(() => {
-                                I18nManager.allowRTL(i18next.language === 'ar');
-                                I18nManager.forceRTL(i18next.language === 'ar');
-                                Updates.reloadAsync();
-                            })
-                    }}>
-                    <Text className='text-white text-base font-medium'>{t('language')}</Text>
+                onPress={() => {
+                i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
+                .then(() => {
+                I18nManager.allowRTL(i18next.language === 'ar');
+                I18nManager.forceRTL(i18next.language === 'ar');
+                Updates.reloadAsync();
+            })
+            }}>
+                <Text className='text-white text-base font-medium'>{t('language')}</Text>
                 </Pressable>
-            </View>
-            <View className="flex flex-col w-full">
+                </View>
+                <View className="flex flex-col w-full">
                 <FlatList
-                    data={relatedData}
-                    renderItem={renderRelated}
-                    keyExtractor={item => item.email}
+                data={relatedData}
+                renderItem={renderRelated}
+                keyExtractor={item => item.email}
                 />
-            </View>
+                </View>
+                </>
+            }
         </View>
     );
 };

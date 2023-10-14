@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, Dimensions, Image, Share, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from "../context/AuthContext";
 import {AntDesign, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons} from '@expo/vector-icons';
@@ -27,7 +27,9 @@ const HomeScreen = ({route, navigation}) => {
         })
             .then(response => {
                 if (response.data.status === 'OK') {
-                    navigation.navigate('Invitations')
+                    Share.share({
+                        message: t('youCanUseThisCodeToLoginAndCreateYourAccountCode', {code: response.data.code})
+                    })
                 }
                 setIsLoading(false);
             })
@@ -96,7 +98,7 @@ const HomeScreen = ({route, navigation}) => {
             >
                 <View className='flex-row py-1 px-2 items-center'>
                     <Text className='text-base'>
-                        {'Welcome '}
+                        {t('welcome')}
                     </Text>
                     <Text className='text-lg text-black font-bold capitalize'>
                         {user.first_name}
@@ -199,28 +201,32 @@ const HomeScreen = ({route, navigation}) => {
                         onChange={handleSheetChanges}
                     >
                         <View className="flex-1 justify-center px-6 space-y-3">
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('TimedPass')}
-                            >
-                                <View
-                                    className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
-                                >
-                                    <Text className='self-center text-base font-medium '>
-                                        {t('tenant')}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => generateFamilyCode()}
-                                >
-                                    <View
-                                        className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
+                            {user.role === "owner" &&
+                                <>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('TimedPass')}
                                     >
-                                        <Text className='self-center text-base font-medium '>
-                                            {t('family')}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
+                                        <View
+                                            className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
+                                        >
+                                            <Text className='self-center text-base font-medium '>
+                                                {t('tenant')}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => generateFamilyCode()}
+                                    >
+                                        <View
+                                            className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
+                                        >
+                                            <Text className='self-center text-base font-medium '>
+                                                {t('family')}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </>
+                            }
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('OneTimePass')}
                             >

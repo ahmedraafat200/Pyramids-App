@@ -2,23 +2,25 @@
 <project version="4">
   <component name="AnalysisUIOptions">
     <option name="SPLITTER_PROPORTION" value="0.3" />
+    <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18ac6c87-98c7-4e0f-8b0a-6a87d1184c41" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/eas.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/adaptive-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/adaptive-icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/ar.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/ar.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/en.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Navigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navigation.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,34 +40,37 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2WOqEOy87M6jZmOQKmy55Ohqs8t" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.laravel-idea.search-composer-json": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/ahmedraafat200/Sites/PyramidsApp/src/screens",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/Users/ahmedraafat200/Sites/PyramidsApp/node_modules/prettier",
-    "settings.editor.selected.configurable": "allyConfigurable",
-    "ts.external.directory.path": "/Applications/PhpStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.laravel-idea.search-composer-json&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp/locales&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;allyConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/PhpStorm.app/Contents/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/locales" />
+      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/src/screens" />
       <recent name="$PROJECT_DIR$/src/screens/Auth" />
-      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/assets/steps" />
-      <recent name="$PROJECT_DIR$/src/components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/screens" />
@@ -85,7 +90,8 @@
       <workItem from="1696832421949" duration="11623000" />
       <workItem from="1696921620082" duration="19817000" />
       <workItem from="1697095313258" duration="33619000" />
-      <workItem from="1697194627543" duration="62321000" />
+      <workItem from="1697194627543" duration="71521000" />
+      <workItem from="1697318172829" duration="3175000" />
     </task>
     <servers />
   </component>

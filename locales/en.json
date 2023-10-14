@@ -43,5 +43,16 @@
   "aVerificationCodeWillBeSentYourEmail": "A verification code will be sent your email",
   "emailVerification": "Email Verification",
   "enterEndDate": "Enter end date",
-  "enterStartDate": "Enter start date"
+  "enterStartDate": "Enter start date",
+  "oneTime": "One Time",
+  "welcome": "Welcome ",
+  "generatedAt": "Generated At : ",
+  "guest": "Guest: ",
+  "ride": "Ride: ",
+  "activeFrom": "Active from ",
+  "to": " to ",
+  "home": "Home",
+  "invitations": "Invitations",
+  "profile": "Profile",
+  "updatePicture": "Update Picture"
 }

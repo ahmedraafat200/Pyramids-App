@@ -6,9 +6,6 @@ import {useTranslation} from "react-i18next";
 import axiosInstance from "../../axiosInstance";
 import Spinner from "react-native-loading-spinner-overlay";
 import Steps from "../../components/Steps";
-import {Formik} from "formik";
-import DropDownFormik from "../../components/DropDownFormik";
-import * as yup from "yup";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import OTPTextView from "react-native-otp-textinput";
 import Toast from "react-native-toast-message";
@@ -74,6 +71,7 @@ const OtpVerification = ({route, navigation}) => {
                         <Text className='text-base m-2 text-slate-900 text-center'>{t('enterTheCodeThatYouHaveReceivedOnYourEmail')}</Text>
                         <View className="flex-1 w-full mt-4">
                             <OTPTextView
+                                containerStyle={{alignSelf: 'center', direction: 'ltr'}}
                                 ref={input}
                                 handleTextChange={setOtpInput}
                                 handleCellTextChange={handleCellTextChange}

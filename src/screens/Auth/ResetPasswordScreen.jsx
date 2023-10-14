@@ -34,6 +34,7 @@ const ResetPasswordScreen = ({route, navigation}) => {
             .then(response => {
                 setIsLoading(false);
                 if (response.data.status === 'OK') {
+                    console.log(response.data);
                     navigation.navigate('OtpVerification', {
                         'userId': response.data.userId,
                         'role': response.data.role,
@@ -42,7 +43,6 @@ const ResetPasswordScreen = ({route, navigation}) => {
                 }
             })
             .catch(error => {
-
                 setIsLoading(false);
             })
     }

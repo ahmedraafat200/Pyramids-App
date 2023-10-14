@@ -88,7 +88,7 @@ const CustomDrawer = props => {
 };
 
 const DrawerNavigator = () => {
-    // const insets = useSafeAreaInsets();
+    const {t} = useTranslation();
 
     return (
         <Drawer.Navigator
@@ -104,7 +104,8 @@ const DrawerNavigator = () => {
                 name={'Home'}
                 component={HomeScreen}
                 options={{
-                    title: 'Home',
+                    title: t('home'),
+                    drawerStyle: i18next.language === 'ar' ? {marginRight : "auto"} : {},
                     drawerIcon: ({focused, color, size}) => (
                         <Ionicons
                             name="md-home" size={size} color={color}
@@ -116,7 +117,8 @@ const DrawerNavigator = () => {
                 name={'Invitations'}
                 component={InvitationsScreen}
                 options={{
-                    title: 'Invitations',
+                    title: t('invitations'),
+                    drawerStyle: i18next.language === 'ar' ? {marginRight : "auto"} : {},
                     drawerIcon: ({focused, color, size}) => (
                         <SimpleLineIcons name="envelope-letter" size={size} color={color}/>
                     ),
@@ -126,7 +128,8 @@ const DrawerNavigator = () => {
                 name={'Profile'}
                 component={ProfileScreen}
                 options={{
-                    title: 'Profile',
+                    title: t('profile'),
+                    drawerStyle: i18next.language === 'ar' ? {marginRight : "auto"} : {},
                     drawerIcon: ({focused, color, size}) => (
                         <Ionicons name="ios-person-circle-outline" size={size} color={color}/>
 
@@ -139,7 +142,8 @@ const DrawerNavigator = () => {
                 options={
                     {
                         headerShown: false,
-                        title: 'Change Password',
+                        title: t('changePassword'),
+                        drawerStyle: i18next.language === 'ar' ? {marginRight : "auto"} : {},
                         drawerIcon: ({focused, color, size}) => (
                             <MaterialCommunityIcons name="lock-reset" size={size} color={color} />
                         ),
