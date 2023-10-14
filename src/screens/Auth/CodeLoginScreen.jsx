@@ -31,15 +31,20 @@ const CodeLoginScreen = ({route, navigation}) => {
         })
             .then(response => {
                 setIsLoading(false);
-                // if (response.data.status === 'OK'){
+                if (response.data.status === 'OK'){
+                    console.log(response.data)
                     navigation.navigate('RegisterValidation', {
                         ownerData: {
-                            'name' : 'Ahmed Raafat',
-                            'unit' : 'Test',
-                            'project' : 'Test',
+                            'name' : response.data.first_name + ' ' + response.data.last_name,
+                            'unit' : response.data.unit,
+                            'project' : response.data.project,
+                            'role': response.data.codeType,
+                            'userPhoto': response.data.userPhoto,
+                            'ownerId': response.data.ownerId,
+                            'usedCode': response.data.usedCode
                         }
                     });
-                // }
+                }
             })
             .catch(error => {
                 console.log(error);

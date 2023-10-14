@@ -24,12 +24,18 @@ import {Dimensions, Image, Text, TouchableOpacity, View} from "react-native";
 import ResetPasswordScreen from "../screens/Auth/ResetPasswordScreen";
 import OtpVerificationScreen from "../screens/Auth/OtpVerificationScreen";
 import ChangePasswordScreen from "../screens/Auth/ChangePasswordScreen";
+import OneTimePassScreen from "../screens/OneTimePassScreen";
+import TimedPassScreen from "../screens/TimedPassScreen";
+import InvitationsScreen from "../screens/InvitationsScreen";
+import userImage from "../../assets/user.png";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 const CustomDrawer = props => {
     const {user, logout} = useContext(AuthContext);
+    const profile = Image.resolveAssetSource(userImage).uri;
+
     return (
         <View style={{flex: 1}}>
             <DrawerContentScrollView {...props}>
@@ -50,7 +56,7 @@ const CustomDrawer = props => {
                     </View>
                     <Image
                         source={{
-                            uri: user.userPhoto,
+                            uri: user.userPhoto !== "" ? user.userPhoto : profile,
                         }}
                         resizeMode="contain"
                         style={{width: 60, height: 60, borderRadius: 30}}
@@ -103,7 +109,7 @@ const DrawerNavigator = () => {
             />
             <Drawer.Screen
                 name={'Invitations'}
-                component={ProfileScreen}
+                component={InvitationsScreen}
                 options={{
                     title: 'Invitations',
                     drawerIcon: ({focused, color, size}) => (
@@ -141,7 +147,6 @@ const DrawerNavigator = () => {
 const Navigation = () => {
     const {user, splashLoading} = useContext(AuthContext);
 
-
     return (
         <Stack.Navigator>
             {splashLoading ? (
@@ -156,6 +161,16 @@ const Navigation = () => {
                         name={"Drawer"}
                         component={DrawerNavigator}
                         options={{headerShown: false}}
+                    />
+                    <Stack.Screen
+                        name={"OneTimePass"}
+                        component={OneTimePassScreen}
+                        options={{title: 'One Time Pass'}}
+                    />
+                    <Stack.Screen
+                        name={"TimedPass"}
+                        component={TimedPassScreen}
+                        options={{title: 'Tenant Pass'}}
                     />
                 </>
             ) : (

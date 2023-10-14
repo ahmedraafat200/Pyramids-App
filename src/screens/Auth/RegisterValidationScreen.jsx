@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View} from "react-native";
+import React, {useEffect, useState} from "react";
+import {Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View} from "react-native";
 import {AuthContext} from "../../context/AuthContext";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {useTranslation} from "react-i18next";
@@ -8,6 +8,7 @@ import * as yup from "yup";
 import DropDownFormik from "../../components/DropDownFormik";
 import Steps from "../../components/Steps";
 import axiosInstance from "../../axiosInstance";
+import userImage from "../../../assets/user.png";
 
 const registerValidationSchema = yup.object().shape({
     project: yup
@@ -26,31 +27,25 @@ const registerValidationSchema = yup.object().shape({
 
 const RegisterValidationScreen = ({route, navigation}) => {
     const {t} = useTranslation();
+    const profile = Image.resolveAssetSource(userImage).uri;
     const ownerData = route.params ? route.params.ownerData : {};
     const [isLoading, setIsLoading] = useState(false)
     const [projectItems, setProjectItems] = useState([
-        {label: 'Apple', value: 'apple'},
-        {label: 'Banana', value: 'banana'}
+        {label: 'Sky City', value: 'Sky City'}
     ]);
-    const [unitItems, setUnitItems] = useState([
-        {label: 'Test', value: 'Test'},
-        {label: 'Banana', value: 'banana'}
-    ]);
+    const [unitItems, setUnitItems] = useState([]);
 
-    function validateOwner(inputData) {
+    function getUnits() {
         setIsLoading(true);
-        let formData = new FormData();
-        Object.keys(inputData).forEach(fieldName => {
-            formData.append(fieldName, inputData[fieldName]);
-        })
-        axiosInstance.post(`/validate_new_owner.php`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
+        axiosInstance.get(`/get_units.php`, {
+            headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
                 setIsLoading(false);
-                navigation.navigate('Register', {
-                    validationData: inputData,
+                let units = response.data.units.map(item => {
+                    return {label: item.unit, value: item.unit}
                 })
+                setUnitItems(units);
             })
             .catch(error => {
                 // console.log(error);
@@ -58,12 +53,52 @@ const RegisterValidationScreen = ({route, navigation}) => {
             })
     }
 
+    function validateOwner(inputData) {
+        setIsLoading(true);
+        if (ownerData.ownerId) {
+            inputData = {
+                ...inputData,
+                ownerId: ownerData.ownerId,
+                usedCode: ownerData.usedCode
+            }
+            setIsLoading(false);
+            navigation.navigate('Register', {
+                validationData: inputData,
+                role: ownerData.role
+            })
+        } else {
+            let formData = new FormData();
+            Object.keys(inputData).forEach(fieldName => {
+                formData.append(fieldName, inputData[fieldName]);
+            })
+
+            axiosInstance.post(`/validate_new_owner.php`, formData, {
+                headers: {"Content-Type": "multipart/form-data"}
+            })
+                .then(response => {
+                    setIsLoading(false);
+                    if (response.data.status === 'OK') {
+                        navigation.navigate('Register', {
+                            validationData: inputData,
+                        })
+                    }
+                })
+                .catch(error => {
+                    // console.log(error);
+                    setIsLoading(false);
+                })
+        }
+    }
+
+    useEffect(() => {
+        getUnits();
+    }, [])
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={1} totalSteps={ownerData ? 3 : 2}/>
+            <Steps classNames="pt-10 bg-white" step={ownerData.ownerId ? 2 : 1} totalSteps={ownerData.ownerId ? 3 : 2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <Formik
                     validationSchema={registerValidationSchema}
@@ -79,36 +114,48 @@ const RegisterValidationScreen = ({route, navigation}) => {
                           isValid,
                       }) => (
                         <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-4 text-slate-900'>Owner Validation</Text>
                             <View className="flex flex-col space-y-4 w-full">
-                                { ownerData.name ?
-                                <View>
-                                    <TextInput
-                                        className='bg-white border border-black rounded-lg h-12 px-4'
-                                        name="owner_name"
-                                        value={ownerData.name}
-                                        editable={!ownerData}
-                                    />
-                                </View> : null
+                                <Text className='self-center text-2xl font-bold mt-4 mb-8 text-slate-900'>Owner
+                                    Validation</Text>
+                                {ownerData.name ?
+                                    <View className="">
+                                        <Image className="self-center"
+                                               source={{uri: ownerData.userPhoto !== "" ? ownerData.userPhoto : profile}}
+                                               style={{
+                                                   height: 100,
+                                                   width: 100,
+                                                   borderRadius: 85,
+                                                   borderWidth: 2,
+                                                   borderColor: 'black',
+                                                   marginBottom: 10
+                                               }}
+                                        />
+                                        <TextInput
+                                            className='bg-white border border-black rounded-lg h-12 px-4'
+                                            name="owner_name"
+                                            value={ownerData.name}
+                                            editable={!ownerData}
+                                        />
+                                    </View> : null
                                 }
                                 <View>
                                     {ownerData.project ?
-                                            <TextInput
-                                                className='bg-white border border-black rounded-lg h-12 px-4'
-                                                name="project"
-                                                onChangeText={handleChange('project')}
-                                                onBlur={handleBlur('project')}
-                                                value={values.project}
-                                                editable={!ownerData}
-                                            /> :
+                                        <TextInput
+                                            className='bg-white border border-black rounded-lg h-12 px-4'
+                                            name="project"
+                                            onChangeText={handleChange('project')}
+                                            onBlur={handleBlur('project')}
+                                            value={values.project}
+                                            editable={!ownerData}
+                                        /> :
                                         <DropDownFormik
                                             name="project"
                                             placeholder="Select your project"
                                             items={projectItems}
-                                        /> }
+                                        />}
                                     {errors.project &&
                                         <Text className='px-4'
-                                        style={{fontSize: 10, color: 'red'}}>{errors.project}</Text>
+                                              style={{fontSize: 10, color: 'red'}}>{errors.project}</Text>
                                     }
                                 </View>
 
@@ -122,12 +169,12 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                             value={values.unit}
                                             editable={!ownerData}
                                         /> :
-                                    <DropDownFormik
-                                        name="unit"
-                                        placeholder="Select your unit"
-                                        items={unitItems}
-                                        zIndex={50}
-                                    /> }
+                                        <DropDownFormik
+                                            name="unit"
+                                            placeholder="Select your unit"
+                                            items={unitItems}
+                                            zIndex={50}
+                                        />}
                                     {errors.unit &&
                                         <Text className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.unit}</Text>

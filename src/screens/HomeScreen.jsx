@@ -9,10 +9,32 @@ import {use} from "i18next";
 
 const ScreenWidth = Dimensions.get("window").width;
 
-const HomeScreen = () => {
+const HomeScreen = ({route, navigation}) => {
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false)
     const [accessData, setAccessData] = useState({})
+
+    function generateFamilyCode() {
+        setIsLoading(true);
+        let formData = new FormData();
+        formData.append('userId', user.userId);
+        formData.append('role', user.role);
+        formData.append('invitaion_type', 'family');
+        axiosInstance.post(`/create_invitation_family_renter.php`, formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        })
+            .then(response => {
+                console.log(response.data)
+                if (response.data.status === 'OK') {
+                    navigation.navigate('Invitations')
+                }
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.log(error)
+                setIsLoading(false);
+            })
+    }
 
     function userAccess() {
         setIsLoading(true);
@@ -124,6 +146,7 @@ const HomeScreen = () => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
+                    onPress={() => navigation.navigate('Invitations')}
                 >
                     <View
                         className='bg-gray-50 rounded-xl py-2 my-2'
@@ -149,7 +172,7 @@ const HomeScreen = () => {
                     <BottomSheetModal
                         ref={userAccessModalRef}
                         index={1}
-                        snapPoints={useMemo(() => ['25%', '80%'], [])}
+                        snapPoints={useMemo(() => ['25%', '75%'], [])}
                         backdropComponent={renderBackdrop}
                         onChange={handleSheetChanges}
                     >
@@ -165,7 +188,6 @@ const HomeScreen = () => {
                                            source={{uri: 'data:image/png;base64,' + accessData.qrcode}}/>
                                 </> : null
                             }
-
                         </View>
                     </BottomSheetModal>
                 </View>
@@ -180,16 +202,18 @@ const HomeScreen = () => {
                     >
                         <View className="flex-1 justify-center px-6 space-y-3">
                             <TouchableOpacity
+                                onPress={() => navigation.navigate('TimedPass')}
                             >
                                 <View
                                     className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
                                 >
                                     <Text className='self-center text-base font-medium '>
-                                        Renter
+                                        Tenant
                                     </Text>
                                 </View>
                             </TouchableOpacity>
                                 <TouchableOpacity
+                                    onPress={() => generateFamilyCode()}
                                 >
                                     <View
                                         className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
@@ -200,6 +224,7 @@ const HomeScreen = () => {
                                     </View>
                                 </TouchableOpacity>
                             <TouchableOpacity
+                                onPress={() => navigation.navigate('OneTimePass')}
                             >
                                 <View
                                     className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'

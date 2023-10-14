@@ -52,6 +52,7 @@ const RegisterScreen = ({route, navigation}) => {
     const [hidePass, setHidePass] = useState(true);
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
+    const role = route.params.role;
 
     function registerOwner(inputData) {
         setIsLoading(true);
@@ -63,22 +64,26 @@ const RegisterScreen = ({route, navigation}) => {
         Object.keys(inputData).forEach(fieldName => {
             formData.append(fieldName, inputData[fieldName]);
         })
-        formData.append('role', 'owner');
+        formData.append('role', role ?? 'owner');
         formData.append('token', '');
 
-        const fileName = selectedImage.split('/').pop();
-        const fileType = fileName.split('.').pop();
+        if (selectedImage !== profile){
+            const fileName = selectedImage.split('/').pop();
+            const fileType = fileName.split('.').pop();
 
-        formData.append('userPhoto', {
-            uri: selectedImage,
-            name: fileName,
-            type: `image/${fileType}`
-        });
+            formData.append('userPhoto', {
+                uri: selectedImage,
+                name: fileName,
+                type: `image/${fileType}`
+            });
+        }
 
-        axiosInstance.post(`/register_owner.php`, formData, {
+        const url = role ? '/register_with_code.php'  : '/register_owner.php';
+        axiosInstance.post(url, formData, {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
+                console.log(response)
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
                     navigation.navigate('Login');
@@ -119,7 +124,7 @@ const RegisterScreen = ({route, navigation}) => {
             behavior={Platform.OS === "ios" ? "padding" : null}
         className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={2} totalSteps={2}/>
+            <Steps classNames="pt-10 bg-white" step={role ? 3 : 2} totalSteps={role ? 3 : 2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <Formik
                         validationSchema={registerValidationSchema}

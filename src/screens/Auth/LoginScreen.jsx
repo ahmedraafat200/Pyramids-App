@@ -82,7 +82,8 @@ const LoginScreen = ({route, navigation}) => {
                             }
                             </View>
                             <View className='flex flex-row justify-between items-center my-6'>
-                                <Pressable>
+                                <Pressable
+                                onPress={() => {navigation.navigate('LoginByCode')}}>
                                     <Text className='text-black font-bold'>{t('loginByCode')}</Text>
                                 </Pressable>
                                 <Pressable
