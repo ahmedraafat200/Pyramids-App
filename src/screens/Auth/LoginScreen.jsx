@@ -24,7 +24,7 @@ const loginValidationSchema = yup.object().shape({
 
 const LoginScreen = ({route, navigation}) => {
     const {t} = useTranslation();
-    const {isLoading, login} = useContext(AuthContext)
+    const {login, isLoading} = useContext(AuthContext)
 
     return (
         <SafeAreaView className='flex-1 items-center bg-white'>

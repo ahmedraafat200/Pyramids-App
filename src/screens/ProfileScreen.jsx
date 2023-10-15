@@ -23,6 +23,8 @@ import userImage from "../../assets/user.png";
 import {StatusBar} from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import * as Updates from "expo-updates";
+import * as SecureStore from "expo-secure-store";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const ProfileScreen = () => {
     const {t} = useTranslation();
@@ -33,27 +35,28 @@ const ProfileScreen = () => {
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
     const [updateProfile, setUpdateProfile] = useState(false)
-console.log(user);
+
     function updateProfilePicture() {
         setIsLoading(true);
         let formData = new FormData();
         formData.append('userId', user.userId);
         formData.append('role', user.role);
 
-            const fileName = selectedImage.split('/').pop();
-            const fileType = fileName.split('.').pop();
+        const fileName = selectedImage.split('/').pop();
+        const fileType = fileName.split('.').pop();
 
-            formData.append('userPhoto', {
-                uri: selectedImage,
-                name: fileName,
-                type: `image/${fileType}`
-            });
+        formData.append('userPhoto', {
+            uri: selectedImage,
+            name: fileName,
+            type: `image/${fileType}`
+        });
 
         axiosInstance.post('/user_change_photo.php', formData, {
-            headers: { "Content-Type": "multipart/form-data" }
+            headers: {"Content-Type": "multipart/form-data"}
         })
-            .then(response => {
-                setUser(response.data)
+            .then(async response => {
+                await SecureStore.setItemAsync('user', JSON.stringify(response.data));
+                getUserData();
                 setIsLoading(false);
                 setUpdateProfile(false);
             })
@@ -63,19 +66,22 @@ console.log(user);
     }
 
     function getUserData() {
+        setIsLoading(true);
         let formData = new FormData();
         formData.append('userId', user.userId);
         formData.append('role', user.role);
         axiosInstance.post(`/user_account_data.php`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
+            headers: {"Content-Type": "multipart/form-data"}
         })
             .then(response => {
                 setUserData(response.data.data);
-                if (user.role === 'owner'){
+                if (user.role === 'owner') {
                     setRelatedData(response.data.relatedData.family.concat(response.data.relatedData.renter));
                 }
+                setIsLoading(false);
             })
             .catch(error => {
+                setIsLoading(false);
             })
     }
 
@@ -84,7 +90,7 @@ console.log(user);
 
         (async () => {
             if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
                     alert('Sorry, Camera roll permissions are required to make this work!');
                 }
@@ -101,104 +107,110 @@ console.log(user);
         });
 
         if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
+
+            const resizedPhoto = await ImageManipulator.manipulateAsync(
+                result.assets[0].uri,
+                [{resize: {width: 600}}], // resize to width of 300 and preserve aspect ratio
+                {compress: 0.5, format: 'jpeg'},
+            );
+            setSelectedImage(resizedPhoto.uri);
             setUpdateProfile(true);
         }
     };
 
     const renderRelated = ({item}) => (
-            <View className='bg-gray-50 rounded-xl max-w-full px-2 py-3 m-2'
-                  style={[
-                      styles.cardShadow
-                  ]}
-            >
-                <View className='flex-row py-1 px-1 items-center'>
-                    <View className="space-y-1">
-                        <View className="flex-row items-center">
-                            <Text className='text-base text-black font-bold capitalize'>
-                                {item.first_name + ' ' + item.last_name}
-                            </Text>
-                        </View>
-                        <View className="flex-row space-x-1 items-center">
-                            <Text
-                                className="bg-gray-900 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
-                                {item.source}
-                            </Text>
-                            <Text
-                                className="bg-gray-600 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
-                                {item.userstatus}
-                            </Text>
-                        </View>
+        <View className='bg-gray-50 rounded-xl max-w-full px-2 py-3 m-2'
+              style={[
+                  styles.cardShadow
+              ]}
+        >
+            <View className='flex-row py-1 px-1 items-center'>
+                <View className="space-y-1">
+                    <View className="flex-row items-center">
+                        <Text className='text-base text-black font-bold capitalize'>
+                            {item.first_name + ' ' + item.last_name}
+                        </Text>
                     </View>
-                    <View className='ml-auto'>
-                        <Image
-                            source={{
-                                uri: item.userPhoto !== "" ? item.userPhoto : profile,
-                            }}
-                            resizeMode="contain"
-                            style={{width: 60, height: 60, borderRadius: 30}}
-                        />
+                    <View className="flex-row space-x-1 items-center">
+                        <Text
+                            className="bg-gray-900 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
+                            {item.source}
+                        </Text>
+                        <Text
+                            className="bg-gray-600 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
+                            {item.userstatus}
+                        </Text>
                     </View>
                 </View>
+                <View className='ml-auto'>
+                    <Image
+                        source={{
+                            uri: item.userPhoto !== "" ? item.userPhoto : profile,
+                        }}
+                        resizeMode="contain"
+                        style={{width: 60, height: 60, borderRadius: 30}}
+                    />
+                </View>
             </View>
+        </View>
     );
 
     return (
-        <View className="flex-1 px-10 items-center bg-white space-y-2 divide-y-2 divide-gray-400">
+        <View className="flex-1 px-10 py-2 items-center bg-white space-y-2 divide-y-2 divide-gray-400">
             <Spinner visible={isLoading}/>
             {userData &&
                 <>
-                <View className="flex flex-col w-full items-center">
-                    <TouchableOpacity onPress={handleImageSelection}>
-                        <Image
-                            source={{uri: updateProfile ? selectedImage : user.userPhoto}}
-                            style={{
-                                height: 100,
-                                width: 100,
-                                borderRadius: 85,
-                                borderWidth: 2,
-                                borderColor: 'black',
-                                marginBottom: 10
-                            }}
-                        />
-                    </TouchableOpacity>
-                    <Text
-                        className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
-                    <Text className="text-lg font-medium capitalize">{userData.email}</Text>
-                    <Text className="text-lg font-normal capitalize">{userData.unit}</Text>
-                    {updateProfile &&
+                    <View className="flex-col w-full items-center">
+                        <TouchableOpacity onPress={handleImageSelection}>
+                            <Image
+                                source={{uri: updateProfile ? selectedImage : userData.userPhoto}}
+                                style={{
+                                    height: 100,
+                                    width: 100,
+                                    borderRadius: 85,
+                                    borderWidth: 2,
+                                    borderColor: 'black',
+                                    marginBottom: 10
+                                }}
+                            />
+                        </TouchableOpacity>
+                        <Text
+                            className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
+                        <Text className="text-lg font-medium capitalize">{userData.email}</Text>
+                        <Text className="text-lg font-normal capitalize">{userData.unit}</Text>
+                        {updateProfile &&
+                            <Pressable
+                                className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
+                                onPress={() => {
+                                    updateProfilePicture()
+                                }}
+                            >
+                                <View className='flex-1 flex items-center'>
+                                    <Text className='text-white text-base font-medium'>{t('updatePicture')}</Text>
+                                </View>
+                            </Pressable>
+                        }
+                    </View>
+                    <View className="bg-black rounded-xl w-fit py-1 px-4">
                         <Pressable
-                            className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
                             onPress={() => {
-                                updateProfilePicture()
-                            }}
-                        >
-                            <View className='flex-1 flex items-center'>
-                                <Text className='text-white text-base font-medium'>{t('updatePicture')}</Text>
-                            </View>
+                                i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
+                                    .then(() => {
+                                        I18nManager.allowRTL(i18next.language === 'ar');
+                                        I18nManager.forceRTL(i18next.language === 'ar');
+                                        Updates.reloadAsync();
+                                    })
+                            }}>
+                            <Text className='text-white text-base font-medium'>{t('language')}</Text>
                         </Pressable>
-                    }
-                </View>
-                <View className="bg-black rounded-xl w-fit py-1 px-4">
-                <Pressable
-                onPress={() => {
-                i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                .then(() => {
-                I18nManager.allowRTL(i18next.language === 'ar');
-                I18nManager.forceRTL(i18next.language === 'ar');
-                Updates.reloadAsync();
-            })
-            }}>
-                <Text className='text-white text-base font-medium'>{t('language')}</Text>
-                </Pressable>
-                </View>
-                <View className="flex flex-col w-full">
-                <FlatList
-                data={relatedData}
-                renderItem={renderRelated}
-                keyExtractor={item => item.email}
-                />
-                </View>
+                    </View>
+                    <View className="flex flex-col w-full">
+                        <FlatList
+                            data={relatedData}
+                            renderItem={renderRelated}
+                            keyExtractor={item => item.email}
+                        />
+                    </View>
                 </>
             }
         </View>

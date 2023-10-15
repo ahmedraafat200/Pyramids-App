@@ -13,7 +13,7 @@ export const AuthProvider = ({children, navigation}) => {
     const [splashLoading, setSplashLoading] = useState(false);
 
     const login = (username, password) => {
-        // setIsLoading(true);
+        setSplashLoading(true);
 
         let formData = new FormData();
         formData.append('email', username);
@@ -24,17 +24,17 @@ export const AuthProvider = ({children, navigation}) => {
                 setUser(user);
                 SecureStore.setItemAsync('user', JSON.stringify(user));
             }
-            // setIsLoading(false);
+            setSplashLoading(false);
         }).catch(e => {
-            // setIsLoading(false)
+            setSplashLoading(false)
         })
     };
 
     const logout = () => {
-        // setIsLoading(true);
+        setSplashLoading(true);
         SecureStore.deleteItemAsync('user');
         setUser(null);
-        // setIsLoading(false);
+        setSplashLoading(false);
 
         // axios.post(`${BASE_URL}/student/auth/logout`,
         //     {},

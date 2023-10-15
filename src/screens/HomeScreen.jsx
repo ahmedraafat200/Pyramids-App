@@ -202,7 +202,7 @@ const HomeScreen = ({route, navigation}) => {
                     >
                         <View className="flex-1 justify-center px-6 space-y-3">
                             {user.role === "owner" &&
-                                <>
+                                <View className="space-y-3">
                                     <TouchableOpacity
                                         onPress={() => navigation.navigate('TimedPass')}
                                     >
@@ -225,7 +225,7 @@ const HomeScreen = ({route, navigation}) => {
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
-                                </>
+                                </View>
                             }
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('OneTimePass')}

@@ -83,6 +83,7 @@ const RegisterScreen = ({route, navigation}) => {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(response => {
+                // console.log(response.data)
                 setIsLoading(false);
                 if (response.data.status === 'OK'){
                     navigation.navigate('Login');

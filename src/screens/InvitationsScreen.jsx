@@ -53,11 +53,6 @@ const InvitationsScreen = ({route, navigation}) => {
 
     const layout = useWindowDimensions();
     const [index, setIndex] = useState(0);
-    const [routes] = useState([
-        {key: 'tenant', title: t('tenant')},
-        {key: 'family', title: t('family')},
-        {key: 'oneTime', title: t('oneTime')},
-    ]);
 
     const renderTenant = ({item}) => (
         <TouchableOpacity
@@ -247,16 +242,34 @@ const InvitationsScreen = ({route, navigation}) => {
         </View>
     );
 
-    function handleRefresh(type) {
-        // setIsRefreshing(true);
-        // getInvitationsByType(type);
+    let initialRoutes;
+    if (user.role === 'owner'){
+        initialRoutes = [
+            {key: 'tenant', title: t('tenant')},
+            {key: 'family', title: t('family')},
+            {key: 'oneTime', title: t('oneTime')},
+        ]
+    } else {
+        initialRoutes = [
+            {key: 'oneTime', title: t('oneTime')},
+        ]
+    }
+    const [routes] = useState(initialRoutes);
+
+    let scenes;
+    if (user.role === 'owner'){
+        scenes = {
+            tenant: Tenant,
+            family: Family,
+            oneTime: OneTime
+        };
+    } else {
+        scenes = {
+            oneTime: OneTime
+        };
     }
 
-    const renderScene = SceneMap({
-        tenant: Tenant,
-        family: Family,
-        oneTime: OneTime
-    });
+    const renderScene = SceneMap(scenes);
 
     const renderTabBar = (props) => {
         return (
@@ -322,8 +335,10 @@ const InvitationsScreen = ({route, navigation}) => {
     }
 
     useEffect(() => {
-        getInvitationsByType('renter');
-        getInvitationsByType('family');
+        if (user.role === 'owner'){
+            getInvitationsByType('renter');
+            getInvitationsByType('family');
+        }
         getInvitationsByType('oneTimePass');
     }, [])
 

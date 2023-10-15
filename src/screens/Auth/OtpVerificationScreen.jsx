@@ -25,8 +25,8 @@ const OtpVerification = ({route, navigation}) => {
             const clippedText = await Clipboard.getStringAsync();
             if (clippedText.slice(0, 1) === text) {
                 input.current?.setValue(clippedText, true);
+                validateOtp(clippedText);
             }
-            validateOtp(clippedText);
         }
         if (i === 5) {
             validateOtp(otpInput);

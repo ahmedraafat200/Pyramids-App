@@ -32,6 +32,7 @@ import userImage from "../../assets/user.png";
 import i18next from "../../services/i18next";
 import * as Updates from "expo-updates";
 import {useTranslation} from "react-i18next";
+import Spinner from "react-native-loading-spinner-overlay/src";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
