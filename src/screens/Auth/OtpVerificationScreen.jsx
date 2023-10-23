@@ -25,12 +25,12 @@ const OtpVerification = ({route, navigation}) => {
             const clippedText = await Clipboard.getStringAsync();
             if (clippedText.slice(0, 1) === text) {
                 input.current?.setValue(clippedText, true);
-                validateOtp(clippedText);
+                // validateOtp(clippedText);
             }
         }
-        if (i === 5) {
-            validateOtp(otpInput);
-        }
+        // if (i === 5) {
+        //     validateOtp(otpInput);
+        // }
     };
 
     function validateOtp(otpInput) {
@@ -81,16 +81,16 @@ const OtpVerification = ({route, navigation}) => {
                         </View>
                     </View>
 
-                    {/*<Pressable*/}
-                    {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
-                    {/*    onPress={() => {*/}
-                    {/*        // handleSubmit()*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    <View className='flex-1 flex items-center'>*/}
-                    {/*        <Text className='text-white text-base font-medium'>Proceed</Text>*/}
-                    {/*    </View>*/}
-                    {/*</Pressable>*/}
+                    <Pressable
+                        className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
+                        onPress={() => {
+                            validateOtp(otpInput)
+                        }}
+                    >
+                        <View className='flex-1 flex items-center'>
+                            <Text className='text-white text-base font-medium'>Proceed</Text>
+                        </View>
+                    </Pressable>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>

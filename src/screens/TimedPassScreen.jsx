@@ -17,7 +17,7 @@ import {Formik, useFormik} from "formik";
 import * as yup from "yup";
 import axiosInstance from "../axiosInstance";
 import {AntDesign} from "@expo/vector-icons";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
 const registerValidationSchema = yup.object().shape({
@@ -74,22 +74,22 @@ const TimedPassScreen = ({route, navigation}) => {
     const [showFromDate, setShowFromDate] = useState(false);
     const [showToDate, setShowToDate] = useState(false);
 
-    const onChangeFromDate = (event, selectedDate) => {
-        const currentDate = selectedDate;
+    const onChangeFromDate = (date) => {
+        const currentDate = date.toLocaleDateString("fr-CA");
         setShowFromDate(false);
         setDate(currentDate);
-        setFieldValue("rent_from", currentDate.toLocaleDateString("fr-CA"))
+        setFieldValue("rent_from", currentDate)
     };
 
     const showDatepickerFromDate = () => {
         setShowFromDate(true);
     };
 
-    const onChangeToDate = (event, selectedDate) => {
-        const currentDate = selectedDate;
+    const onChangeToDate = (date) => {
+        const currentDate = date.toLocaleDateString("fr-CA");
         setShowToDate(false);
         setDate(currentDate);
-        setFieldValue("rent_to", currentDate.toLocaleDateString("fr-CA"))
+        setFieldValue("rent_to", currentDate)
     };
 
     const showDatepickerToDate = () => {
@@ -144,6 +144,7 @@ const TimedPassScreen = ({route, navigation}) => {
                                         <TouchableOpacity
                                             onPress={showDatepickerFromDate}>
                                         <TextInput
+                                            pointerEvents="none"
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="rent_from"
                                             placeholder={t('enterStartDate')}
@@ -154,15 +155,12 @@ const TimedPassScreen = ({route, navigation}) => {
                                             editable={false}
                                         />
                                         </TouchableOpacity>
-                                        {showFromDate && (
-                                            <DateTimePicker
-                                                testID="dateTimePicker"
-                                                value={date}
-                                                mode={'date'}
-                                                is24Hour={true}
-                                                onChange={onChangeFromDate}
-                                            />)
-                                        }
+                                        <DateTimePickerModal
+                                            isVisible={showFromDate}
+                                            mode="date"
+                                            onConfirm={onChangeFromDate}
+                                            onCancel={() => {setShowFromDate(false)}}
+                                        />
                                         {errors.rent_from &&
                                             <Text className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.rent_from}</Text>
@@ -172,6 +170,7 @@ const TimedPassScreen = ({route, navigation}) => {
                                         <TouchableOpacity
                                             onPress={showDatepickerToDate}>
                                             <TextInput
+                                                pointerEvents="none"
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="rent_to"
                                                 placeholder={t('enterEndDate')}
@@ -182,15 +181,12 @@ const TimedPassScreen = ({route, navigation}) => {
                                                 editable={false}
                                             />
                                         </TouchableOpacity>
-                                        {showToDate && (
-                                            <DateTimePicker
-                                                testID="dateTimePicker"
-                                                value={date}
-                                                mode={'date'}
-                                                is24Hour={true}
-                                                onChange={onChangeToDate}
-                                            />)
-                                        }
+                                        <DateTimePickerModal
+                                            isVisible={showToDate}
+                                            mode="date"
+                                            onConfirm={onChangeToDate}
+                                            onCancel={() => {setShowToDate(false)}}
+                                        />
                                         {errors.rent_to &&
                                             <Text className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.rent_to}</Text>

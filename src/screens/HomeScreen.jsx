@@ -196,7 +196,7 @@ const HomeScreen = ({route, navigation}) => {
                     <BottomSheetModal
                         ref={inviteModalRef}
                         index={1}
-                        snapPoints={useMemo(() => ['25%', '50%'], [])}
+                        snapPoints={useMemo(() => ['25%', '60%'], [])}
                         backdropComponent={renderBackdrop}
                         onChange={handleSheetChanges}
                     >
@@ -235,6 +235,17 @@ const HomeScreen = ({route, navigation}) => {
                                 >
                                     <Text className='self-center text-base font-medium '>
                                         {t('oneTimePass')}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('GatePermission')}
+                            >
+                                <View
+                                    className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
+                                >
+                                    <Text className='self-center text-base font-medium '>
+                                        {t('gatePermission')}
                                     </Text>
                                 </View>
                             </TouchableOpacity>

@@ -25,7 +25,6 @@ import * as Sharing from "expo-sharing";
 import async from "async";
 import {useTranslation} from "react-i18next";
 
-
 const ScreenWidth = Dimensions.get("window").width;
 
 const InvitationsScreen = ({route, navigation}) => {
@@ -35,8 +34,10 @@ const InvitationsScreen = ({route, navigation}) => {
     const [familyInvitations, setFamilyInvitations] = useState([])
     const [tenantInvitations, setTenantInvitations] = useState([])
     const [oneTimeInvitations, setOneTimeInvitations] = useState([])
+    const [gateInvitations, setGateInvitations] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [qrCode, setQrCode] = useState('');
+    const [gateData, setGateData] = useState(null);
     const viewShot = useRef();
 
     const captureAndShareScreenshot = () => {
@@ -81,7 +82,7 @@ const InvitationsScreen = ({route, navigation}) => {
                                 {item.from}
                             </Text>
                             <Text className='text-xs'>
-                                 {t('to')}
+                                {t('to')}
                             </Text>
                             <Text className='text-sm text-black font-bold capitalize'>
                                 {item.to}
@@ -174,6 +175,45 @@ const InvitationsScreen = ({route, navigation}) => {
         </TouchableOpacity>
     );
 
+    const renderGate = ({item}) => (
+        <TouchableOpacity
+            onPress={() =>
+                handleGatePermissionModalPress(item)}>
+            <View className='bg-gray-50 rounded-xl max-w-full px-2 py-3 m-2'
+                  style={[
+                      styles.cardShadow
+                  ]}
+            >
+                <View className='flex-row py-1 px-1 justify-between items-center'>
+                    <View className="space-y-1">
+                        <View className="flex-row items-center">
+                            <Text className='text-xs'>
+                                {t('generatedAt')}
+                            </Text>
+                            <Text className='text-sm text-black font-bold capitalize'>
+                                {item.generated_at}
+                            </Text>
+                        </View>
+                        <View className="flex-row items-center justify-between">
+                            <View className="flex-row items-center">
+                                <Text className='text-sm'>
+                                    {t('guest')}
+                                </Text>
+                                <Text className='text-sm text-black font-bold capitalize'>
+                                    {item.guest_name}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View className="">
+                        <Text
+                            className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
+                    </View>
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+
     const Tenant = () => (
         <View className="flex-1">
             <FlatList
@@ -181,7 +221,7 @@ const InvitationsScreen = ({route, navigation}) => {
                 renderItem={renderTenant}
                 keyExtractor={item => item.invitationId}
                 refreshControl={
-                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('renter')} />
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('renter')}/>
                 }
             />
         </View>
@@ -194,7 +234,7 @@ const InvitationsScreen = ({route, navigation}) => {
                 renderItem={renderFamily}
                 keyExtractor={item => item.invitationId}
                 refreshControl={
-                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('family')} />
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('family')}/>
                 }
             />
         </View>
@@ -207,7 +247,7 @@ const InvitationsScreen = ({route, navigation}) => {
                 renderItem={renderOneTime}
                 keyExtractor={item => item.invitationId}
                 refreshControl={
-                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('oneTimePass')} />
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('oneTimePass')}/>
                 }
             />
             <BottomSheetModalProvider>
@@ -220,7 +260,7 @@ const InvitationsScreen = ({route, navigation}) => {
                         onChange={handleSheetChanges}
                     >
                         <ViewShot
-                            ref = {viewShot}
+                            ref={viewShot}
                             options={{format: "jpg", quality: 0.9}}
                             className="flex-1 items-center space-y-1">
                             <Image className="flex-1 w-full"
@@ -233,7 +273,7 @@ const InvitationsScreen = ({route, navigation}) => {
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
                                 <Text className='text-white text-base font-medium'>{t('share')}</Text>
-                                <AntDesign name="sharealt" size={20} color="white" />
+                                <AntDesign name="sharealt" size={20} color="white"/>
                             </View>
                         </Pressable>
                     </BottomSheetModal>
@@ -242,30 +282,98 @@ const InvitationsScreen = ({route, navigation}) => {
         </View>
     );
 
+    const Gate = () => (
+        <View style={{flex: 1}}>
+            <FlatList
+                data={gateInvitations}
+                renderItem={renderGate}
+                keyExtractor={item => item.invitationId}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing} onRefresh={() => getInvitationsByType('permission')}/>
+                }
+            />
+            <BottomSheetModalProvider>
+                <View className="flex-1 justify-center">
+                    <BottomSheetModal
+                        ref={gatePermissionModalRef}
+                        index={1}
+                        snapPoints={useMemo(() => ['25%', '50%'], [])}
+                        backdropComponent={renderBackdrop}
+                        onChange={handleSheetChanges}
+                    >
+                        {gateData && (
+                            <>
+                                <View className="flex-1 items-center space-y-3 justify-center">
+                                    <View className="flex-row items-center space-x-1">
+                                        <Text className='text-xs capitalize'>
+                                            {t('guest')} :
+                                        </Text>
+                                        <Text className='text-sm text-black font-bold capitalize'>
+                                            {gateData.guest_name}
+                                        </Text>
+                                    </View>
+                                    <View className="flex-row items-center space-x-1">
+                                        <Text className='text-xs capitalize'>
+                                            {t('from')} :
+                                        </Text>
+                                        <Text className='text-sm text-black font-bold capitalize'>
+                                            {gateData.from}
+                                        </Text>
+                                        <Text> - </Text>
+                                        <Text className='text-xs capitalize'>
+                                            {t('to')} :
+                                        </Text>
+                                        <Text className='text-sm text-black font-bold capitalize'>
+                                            {gateData.to}
+                                        </Text>
+                                    </View>
+                                    <Text className='text-sm'>{gateData.description}</Text>
+                                </View>
+                                <Pressable
+                                    className='h-12 bg-black rounded-md flex-row justify-center items-center m-4 px-6'
+                                    onPress={changeInvitationStatus}
+                                >
+                                    <View className='flex-row items-center w-full justify-center space-x-2'>
+                                        <Text
+                                            className='text-white text-base font-medium'>{gateData.codeStatus === "active" ? t('disable') : t('activate')}</Text>
+                                    </View>
+                                </Pressable>
+                            </>
+                        )}
+                    </BottomSheetModal>
+                </View>
+            </BottomSheetModalProvider>
+        </View>
+    );
+
     let initialRoutes;
-    if (user.role === 'owner'){
+    if (user.role === 'owner') {
         initialRoutes = [
             {key: 'tenant', title: t('tenant')},
             {key: 'family', title: t('family')},
             {key: 'oneTime', title: t('oneTime')},
+            {key: 'gate', title: t('gate')},
         ]
     } else {
         initialRoutes = [
             {key: 'oneTime', title: t('oneTime')},
+            {key: 'gate', title: t('gate')},
         ]
     }
     const [routes] = useState(initialRoutes);
 
     let scenes;
-    if (user.role === 'owner'){
+    if (user.role === 'owner') {
         scenes = {
             tenant: Tenant,
             family: Family,
-            oneTime: OneTime
+            oneTime: OneTime,
+            gate: Gate
         };
     } else {
         scenes = {
-            oneTime: OneTime
+            oneTime: OneTime,
+            gate: Gate
         };
     }
 
@@ -283,11 +391,17 @@ const InvitationsScreen = ({route, navigation}) => {
     };
 
     const userAccessModalRef = useRef(null);
+    const gatePermissionModalRef = useRef(null);
 
     // callbacks
     const handleUserAccessModalPress = useCallback(async (qrCode) => {
         await setQrCode(qrCode);
         userAccessModalRef.current?.present();
+    }, []);
+
+    const handleGatePermissionModalPress = useCallback(async (item) => {
+        await setGateData(item);
+        gatePermissionModalRef.current?.present();
     }, []);
 
 
@@ -311,7 +425,6 @@ const InvitationsScreen = ({route, navigation}) => {
         formData.append('userId', user.userId);
         formData.append('role', user.role);
         formData.append('type', type);
-
         axiosInstance.post(`/get_invitations_by_type.php`, formData, {
             headers: {"Content-Type": "multipart/form-data"}
         })
@@ -323,6 +436,8 @@ const InvitationsScreen = ({route, navigation}) => {
                         setTenantInvitations(response.data.data)
                     } else if (type === 'family') {
                         setFamilyInvitations(response.data.data)
+                    } else if (type === 'permission') {
+                        setGateInvitations(response.data.data)
                     }
                 }
                 setIsRefreshing(false)
@@ -334,12 +449,35 @@ const InvitationsScreen = ({route, navigation}) => {
             })
     }
 
+    function changeInvitationStatus() {
+        setIsLoading(true);
+        let status = gateData.codeStatus === "active" ? "expired" : "active";
+        let formData = new FormData();
+        formData.append('new_status', status);
+        formData.append('role', user.role);
+        formData.append('userId', user.userId);
+        formData.append('permissionId', gateData.invitationId);
+        axiosInstance.post(`/activate_deactivate_permission.php`, formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        })
+            .then(response => {
+                if (response.data.status === 'OK') {
+                    getInvitationsByType('permission');
+                }
+                setIsLoading(false);
+            })
+            .catch(error => {
+                setIsLoading(false);
+            })
+    }
+
     useEffect(() => {
-        if (user.role === 'owner'){
+        if (user.role === 'owner') {
             getInvitationsByType('renter');
             getInvitationsByType('family');
         }
         getInvitationsByType('oneTimePass');
+        getInvitationsByType('permission');
     }, [])
 
     return (

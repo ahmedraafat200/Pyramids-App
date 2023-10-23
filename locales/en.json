@@ -26,7 +26,7 @@
   "share": "Share",
   "logOut": "Log Out",
   "enterGuestName": "Enter guest name",
-  "enterGuestRide": "Enter guest ride",
+  "enterGuestRide": "Enter description",
   "enterTheCodeThatYouHaveReceivedOnYourEmail": "Enter the code that you have received on your email",
   "otpVerification": "OTP Verification",
   "confirmEmail": "Confirm email",
@@ -48,11 +48,14 @@
   "welcome": "Welcome ",
   "generatedAt": "Generated At : ",
   "guest": "Guest: ",
-  "ride": "Ride: ",
+  "ride": "Description: ",
   "activeFrom": "Active from ",
   "to": " to ",
   "home": "Home",
   "invitations": "Invitations",
   "profile": "Profile",
-  "updatePicture": "Update Picture"
+  "updatePicture": "Update Picture",
+  "gatePermission": "Gate Permission",
+  "activate": "Activate",
+  "disable": "Disable"
 }

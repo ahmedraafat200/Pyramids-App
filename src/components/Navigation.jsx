@@ -33,6 +33,7 @@ import i18next from "../../services/i18next";
 import * as Updates from "expo-updates";
 import {useTranslation} from "react-i18next";
 import Spinner from "react-native-loading-spinner-overlay/src";
+import GatePermissionScreen from "../screens/GatePermissionScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -181,6 +182,11 @@ const Navigation = () => {
                         name={"TimedPass"}
                         component={TimedPassScreen}
                         options={{title: 'Tenant Pass'}}
+                    />
+                    <Stack.Screen
+                        name={"GatePermission"}
+                        component={GatePermissionScreen}
+                        options={{title: 'Gate Permission'}}
                     />
                 </>
             ) : (
