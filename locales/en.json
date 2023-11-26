@@ -1,6 +1,6 @@
 {
   "login": "Login",
-  "loginByCode": "Login By Code",
+  "loginByCode": "By Code",
   "resetPassword": "Reset password",
   "dontHaveAnAccount": "Don't have an account?",
   "signup": "Signup",
@@ -45,6 +45,7 @@
   "enterEndDate": "Enter end date",
   "enterStartDate": "Enter start date",
   "oneTime": "One Time",
+  "gate": "Gate",
   "welcome": "Welcome ",
   "generatedAt": "Generated At : ",
   "guest": "Guest: ",
@@ -57,5 +58,14 @@
   "updatePicture": "Update Picture",
   "gatePermission": "Gate Permission",
   "activate": "Activate",
-  "disable": "Disable"
+  "disable": "Disable",
+  "phoneVerification": "Phone Verification",
+  "yes": "Yes",
+  "no": "No",
+  "deleteMyAccount": "Delete My Account",
+  "deleteConfirmation": "Delete Confirmation",
+  "areYouSureYouWantToDeleteYourAccount": "Are you sure you want to delete your account ?",
+  "news": "News",
+  "readMore": "Read More..",
+  "media": "Media"
 }

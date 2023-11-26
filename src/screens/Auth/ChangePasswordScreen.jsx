@@ -1,5 +1,7 @@
 import React, {useContext, useState} from "react";
 import {
+    Alert,
+    ImageBackground,
     KeyboardAvoidingView,
     Platform,
     Pressable,
@@ -19,6 +21,8 @@ import {Formik} from "formik";
 import DropDownFormik from "../../components/DropDownFormik";
 import * as yup from "yup";
 import {FontAwesome5} from "@expo/vector-icons";
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../../services/i18next";
 
 const codeValidationSchema = yup.object().shape({
     password: yup
@@ -35,6 +39,7 @@ const ChangePasswordScreen = ({route, navigation}) => {
     const [hidePass, setHidePass] = useState(true);
     const {user} = useContext(AuthContext);
     const userData = route.params ? route.params.userData : null;
+    const { toggleDrawer,closeDrawer,openDrawer } = useNavigation();
 
     function resetPassword(inputData) {
         setIsLoading(true);
@@ -79,13 +84,22 @@ const ChangePasswordScreen = ({route, navigation}) => {
     }
 
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6">
+                    <Image source={require('../../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
             <Spinner visible={isLoading}/>
             {userData ?
-                <Steps classNames="pt-10 bg-white" step={3} totalSteps={3}/> :
-                <View classNames="pt-10"><Text></Text></View>}
+                <Steps classNames="pt-10" step={3} totalSteps={3}/> :
+                <View></View>}
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <Formik
                     validationSchema={codeValidationSchema}
@@ -100,12 +114,17 @@ const ChangePasswordScreen = ({route, navigation}) => {
                           errors,
                           isValid,
                       }) => (
-                        <View className="flex-1 justify-between px-10 items-center bg-white">
-                            <Text className='text-2xl font-bold m-4 text-slate-900'>{t('changePassword')}</Text>
+                        <View className="flex-1 justify-between px-10 items-center">
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-2xl font-bold m-4 text-slate-900'></Text>
                             <View className="flex flex-col space-y-4 w-full">
                                 <View>
                                     <View className="flex-row justify-center items-center">
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='flex-1 bg-white border border-black rounded-lg h-12 px-4'
                                             name="password"
                                             placeholder={t('enterYourPassword')}
@@ -123,12 +142,17 @@ const ChangePasswordScreen = ({route, navigation}) => {
                                         </TouchableOpacity>
                                     </View>
                                     {errors.password &&
-                                        <Text className='px-4'
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.password}</Text>
                                     }
                                 </View>
                                 <View>
                                     <TextInput
+                                        style={{
+                                            fontFamily: 'LightFont',
+                                        }}
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="confirm_password"
                                         placeholder={t('confirmPassword')}
@@ -139,27 +163,49 @@ const ChangePasswordScreen = ({route, navigation}) => {
                                         secureTextEntry
                                     />
                                     {errors.confirm_password &&
-                                        <Text className='px-4'
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.confirm_password}</Text>
                                     }
                                 </View>
                             </View>
 
-                            <Pressable
-                                className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                                onPress={() => {
-                                    handleSubmit()
-                                }}
-                            >
-                                <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>{t('submit')}</Text>
-                                </View>
-                            </Pressable>
+                            {/*<Pressable*/}
+                            {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                            {/*    onPress={() => {*/}
+                            {/*        handleSubmit()*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    <View className='flex-1 flex items-center'>*/}
+                            {/*        <Text style={{*/}
+                            {/*            fontFamily: 'LightFont',*/}
+                            {/*        }} className='text-white text-base font-medium'>{t('submit')}</Text>*/}
+                            {/*    </View>*/}
+                            {/*</Pressable>*/}
+                            <ImageBackground
+                                className={"w-full rounded-xl h-16 mb-1"}
+                                source={require('../../../assets/button-bg.png')}
+                                resizeMode={'contain'}>
+                                <Pressable
+                                    className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                    onPress={() => {
+                                        handleSubmit()
+                                    }}
+                                >
+                                    <View className='flex-1 flex items-center'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-white text-base font-medium'>{t('submit')}</Text>
+                                    </View>
+                                </Pressable>
+                            </ImageBackground>
                         </View>
                     )}
                 </Formik>
             </ScrollView>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

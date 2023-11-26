@@ -4,11 +4,14 @@ import {BASE_URL} from "../config";
 import Toast from "react-native-toast-message";
 import * as SecureStore from "expo-secure-store";
 import axiosInstance from "../axiosInstance";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children, navigation}) => {
     const [user, setUser] = useState(null);
+    const [deviceId, setDeviceId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
 
@@ -18,6 +21,7 @@ export const AuthProvider = ({children, navigation}) => {
         let formData = new FormData();
         formData.append('email', username);
         formData.append('password', password);
+        formData.append('deviceId', deviceId);
         axiosInstance.post(`login.php`, formData).then(res => {
             if (res.data.status === 'OK'){
                 let user = res.data;
@@ -61,17 +65,37 @@ export const AuthProvider = ({children, navigation}) => {
             })
             .catch(err => {
                 setSplashLoading(false);
-            })
+            });
      }
 
+    const getDeviceId = () => {
+        setSplashLoading(true);
+        SecureStore.getItemAsync('deviceId')
+            .then(deviceId => {
+                if (deviceId){
+                    setDeviceId(deviceId);
+                } else {
+                    let deviceId = uuidv4();
+                    setDeviceId(deviceId);
+                    SecureStore.setItemAsync('deviceId', deviceId);
+                }
+                setSplashLoading(false);
+            })
+            .catch(err => {
+                setSplashLoading(false);
+            });
+    }
+
     useEffect(() => {
-        isLoggedIn()
+        isLoggedIn();
+        getDeviceId();
     }, [])
 
     const value = {
         isLoading,
         splashLoading,
         user,
+        deviceId,
         setUser,
         login,
         logout,

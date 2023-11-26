@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import {
-    Image,
+    Image, ImageBackground,
     KeyboardAvoidingView,
     Platform,
     Pressable,
@@ -18,6 +18,8 @@ import * as yup from "yup";
 import axiosInstance from "../axiosInstance";
 import {AntDesign} from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import i18next from "../../services/i18next";
+import {useNavigation} from "@react-navigation/native";
 
 
 const registerValidationSchema = yup.object().shape({
@@ -34,6 +36,7 @@ const TimedPassScreen = ({route, navigation}) => {
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [code, setCode] = useState({});
+    const {toggleDrawer, closeDrawer, openDrawer, goBack} = useNavigation();
 
     const shareInvitation = () => {
         Share.share({
@@ -121,6 +124,16 @@ const TimedPassScreen = ({route, navigation}) => {
     }
 
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6">
+                    <Image source={require('../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
@@ -133,7 +146,9 @@ const TimedPassScreen = ({route, navigation}) => {
                             onPress={shareInvitation}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white" />
                             </View>
                         </Pressable>
@@ -144,6 +159,9 @@ const TimedPassScreen = ({route, navigation}) => {
                                         <TouchableOpacity
                                             onPress={showDatepickerFromDate}>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             pointerEvents="none"
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="rent_from"
@@ -162,7 +180,9 @@ const TimedPassScreen = ({route, navigation}) => {
                                             onCancel={() => {setShowFromDate(false)}}
                                         />
                                         {errors.rent_from &&
-                                            <Text className='px-4'
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.rent_from}</Text>
                                         }
                                     </View>
@@ -170,6 +190,9 @@ const TimedPassScreen = ({route, navigation}) => {
                                         <TouchableOpacity
                                             onPress={showDatepickerToDate}>
                                             <TextInput
+                                                style={{
+                                                    fontFamily: 'LightFont',
+                                                }}
                                                 pointerEvents="none"
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="rent_to"
@@ -188,26 +211,48 @@ const TimedPassScreen = ({route, navigation}) => {
                                             onCancel={() => {setShowToDate(false)}}
                                         />
                                         {errors.rent_to &&
-                                            <Text className='px-4'
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.rent_to}</Text>
                                         }
                                     </View>
                                 </View>
 
-                                <Pressable
-                                    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                                    onPress={() => {
-                                        handleSubmit()
-                                    }}
-                                >
-                                    <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>{t('invite')}</Text>
-                                    </View>
-                                </Pressable>
+                                {/*<Pressable*/}
+                                {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                                {/*    onPress={() => {*/}
+                                {/*        handleSubmit()*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <View className='flex-1 flex items-center'>*/}
+                                {/*        <Text style={{*/}
+                                {/*            fontFamily: 'LightFont',*/}
+                                {/*        }} className='text-white text-base font-medium'>{t('invite')}</Text>*/}
+                                {/*    </View>*/}
+                                {/*</Pressable>*/}
+                                <ImageBackground
+                                    className={"rounded-xl h-16 mb-1  w-full"}
+                                    source={require('../../assets/button-bg.png')}
+                                    resizeMode={'contain'}>
+                                    <Pressable
+                                        className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                        onPress={() => {
+                                            handleSubmit()
+                                        }}
+                                    >
+                                        <View className='flex-1 flex items-center'>
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='text-white text-base font-medium'>{t('invite')}</Text>
+                                        </View>
+                                    </Pressable>
+                                </ImageBackground>
                             </View>
                 }
             </ScrollView>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
+    Alert,
     Button,
     FlatList, I18nManager,
-    Image,
+    Image, ImageBackground,
     Platform,
     Pressable,
     StyleSheet,
@@ -13,18 +14,17 @@ import {
 } from "react-native";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from "../context/AuthContext";
-import {FontAwesome5, Ionicons, MaterialIcons} from "@expo/vector-icons";
-import {SafeAreaView} from "nativewind/dist/preflight";
-import i18next from "../../services/i18next";
 import {useTranslation} from "react-i18next";
 import axiosInstance from "../axiosInstance";
-import {use} from "i18next";
 import userImage from "../../assets/user.png";
 import {StatusBar} from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import * as Updates from "expo-updates";
 import * as SecureStore from "expo-secure-store";
 import * as ImageManipulator from "expo-image-manipulator";
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../services/i18next";
+
 
 const ProfileScreen = () => {
     const {t} = useTranslation();
@@ -35,6 +35,7 @@ const ProfileScreen = () => {
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
     const [updateProfile, setUpdateProfile] = useState(false)
+    const { toggleDrawer,closeDrawer,openDrawer } = useNavigation();
 
     function updateProfilePicture() {
         setIsLoading(true);
@@ -85,6 +86,25 @@ const ProfileScreen = () => {
             })
     }
 
+    function deleteAccount() {
+        setIsLoading(true);
+        let formData = new FormData();
+        console.log(user.email)
+        formData.append('email', user.email);
+        formData.append('description', 'Delete my account');
+        axiosInstance.post(`/request_account_deletion.php`, formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        })
+            .then(response => {
+                console.log(response.data)
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.log(error)
+                setIsLoading(false);
+            })
+    }
+
     useEffect(() => {
         getUserData();
 
@@ -127,16 +147,22 @@ const ProfileScreen = () => {
             <View className='flex-row py-1 px-1 items-center'>
                 <View className="space-y-1">
                     <View className="flex-row items-center">
-                        <Text className='text-base text-black font-bold capitalize'>
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }} className='text-base text-black font-bold capitalize'>
                             {item.first_name + ' ' + item.last_name}
                         </Text>
                     </View>
                     <View className="flex-row space-x-1 items-center">
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-900 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
                             {item.source}
                         </Text>
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-600 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
                             {item.userstatus}
                         </Text>
@@ -156,10 +182,20 @@ const ProfileScreen = () => {
     );
 
     return (
-        <View className="flex-1 px-10 py-2 items-center bg-white space-y-2 divide-y-2 divide-gray-400">
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6">
+                    <Image source={require('../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
+        <View className="flex-1 px-10 py-2 items-center">
             <Spinner visible={isLoading}/>
             {userData &&
-                <>
+                <View className="flex-1 w-full justify-between">
+                    <View className="flex-1 items-center space-y-2 divide-y-2 divide-gray-400">
                     <View className="flex-col w-full items-center">
                         <TouchableOpacity onPress={handleImageSelection}>
                             <Image
@@ -174,10 +210,16 @@ const ProfileScreen = () => {
                                 }}
                             />
                         </TouchableOpacity>
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
-                        <Text className="text-lg font-medium capitalize">{userData.email}</Text>
-                        <Text className="text-lg font-normal capitalize">{userData.unit}</Text>
+                        <Text style={{
+                            fontFamily: 'LightFont',
+                        }} className="text-lg font-medium capitalize">{userData.email}</Text>
+                        <Text style={{
+                            fontFamily: 'LightFont',
+                        }} className="text-lg font-normal capitalize">{userData.unit}</Text>
                         {updateProfile &&
                             <Pressable
                                 className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
@@ -186,12 +228,14 @@ const ProfileScreen = () => {
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>{t('updatePicture')}</Text>
+                                    <Text style={{
+                                        fontFamily: 'LightFont',
+                                    }} className='text-white text-base font-medium'>{t('updatePicture')}</Text>
                                 </View>
                             </Pressable>
                         }
                     </View>
-                    <View className="bg-black rounded-xl w-fit py-1 px-4">
+                    <View className="rounded-xl w-fit py-1 px-4">
                         <Pressable
                             onPress={() => {
                                 i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
@@ -201,7 +245,13 @@ const ProfileScreen = () => {
                                         Updates.reloadAsync();
                                     })
                             }}>
-                            <Text className='text-white text-base font-medium'>{t('language')}</Text>
+                            <Image className={'h-10'}
+                                   source={i18next.language === 'ar' ? require('../../assets/en.png') : require('../../assets/ar.png')}
+                                   resizeMode={"contain"}
+                            />
+                            {/*<Text style={{*/}
+                            {/*    fontFamily: 'LightFont',*/}
+                            {/*}} className='text-white text-base font-medium'>{t('language')}</Text>*/}
                         </Pressable>
                     </View>
                     <View className="flex flex-col w-full">
@@ -211,9 +261,35 @@ const ProfileScreen = () => {
                             keyExtractor={item => item.email}
                         />
                     </View>
-                </>
+                    </View>
+                    <ImageBackground
+                        className={"rounded-xl h-16 mb-1"}
+                        source={require('../../assets/button-bg.png')}
+                        resizeMode={'contain'}>
+                        <Pressable
+                            className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                            onPress={() => {
+                                Alert.alert(
+                                    t('deleteConfirmation'),
+                                    t('areYouSureYouWantToDeleteYourAccount'),
+                                    [
+                                        {text: t('no'), style: 'cancel'},
+                                        {text: t('yes'), onPress: () => deleteAccount()},
+                                    ]
+                                );
+                            }}
+                        >
+                            <View className='flex-1 flex items-center'>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-white text-base font-medium'>{t('deleteMyAccount')}</Text>
+                            </View>
+                        </Pressable>
+                    </ImageBackground>
+                </View>
             }
         </View>
+        </ImageBackground>
     );
 };
 

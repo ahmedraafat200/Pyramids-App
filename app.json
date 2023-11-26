@@ -8,7 +8,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
@@ -20,15 +20,18 @@
         "usesNonExemptEncryption": false
       },
       "bundleIdentifier": "com.ahmedraafat200.PyramidsAp",
-      "buildNumber": "3"
+      "buildNumber": "4",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library so the user can change his profile picture."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.ahmedraafat200.PyramidsAp",
-      "versionCode": 3
+      "package": "com.ahmedraafat200.PyramidsApp",
+      "versionCode": 7
     },
     "web": {
       "favicon": "./assets/favicon.png"

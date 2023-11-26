@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {
     Alert,
-    Image,
+    Image, ImageBackground,
     KeyboardAvoidingView,
     Platform,
     Pressable,
@@ -20,6 +20,10 @@ import Steps from "../../components/Steps";
 import userImage from "../../../assets/user.png";
 import axiosInstance from "../../axiosInstance";
 import Spinner from "react-native-loading-spinner-overlay";
+import {AuthContext} from "../../context/AuthContext";
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../../services/i18next";
+
 
 const registerValidationSchema = yup.object().shape({
     first_name: yup
@@ -52,8 +56,10 @@ const RegisterScreen = ({route, navigation}) => {
     const [hidePass, setHidePass] = useState(true);
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
-    const role = route.params.role;
+    const {deviceId} = useContext(AuthContext);
+    const { toggleDrawer,closeDrawer,openDrawer, goBack} = useNavigation();
 
+    const role = route.params.role;
     function registerOwner(inputData) {
         setIsLoading(true);
         let formData = new FormData();
@@ -66,6 +72,7 @@ const RegisterScreen = ({route, navigation}) => {
         })
         formData.append('role', role ?? 'owner');
         formData.append('token', '');
+        formData.append('deviceId', deviceId);
 
         if (selectedImage !== profile){
             const fileName = selectedImage.split('/').pop();
@@ -119,11 +126,20 @@ const RegisterScreen = ({route, navigation}) => {
     };
 
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6">
+                    <Image source={require('../../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
         className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={role ? 3 : 2} totalSteps={role ? 3 : 2}/>
+            <Steps classNames="pt-10" step={role ? 3 : 2} totalSteps={role ? 3 : 2}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                     <Formik
                         validationSchema={registerValidationSchema}
@@ -138,8 +154,10 @@ const RegisterScreen = ({route, navigation}) => {
                               errors,
                               isValid,
                           }) => (
-                            <View className="flex-1 justify-between px-10 items-center bg-white">
-                                <Text className='text-2xl font-bold m-4 text-slate-900'>{t('personalInformation')}</Text>
+                            <View className="flex-1 justify-between px-10 items-center">
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-2xl font-bold m-4 text-slate-900'>{t('personalInformation')}</Text>
 
                                 <View className="flex flex-col space-y-4 w-full">
                                     <View
@@ -178,6 +196,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     <View className="flex flex-row space-x-2">
                                         <View className="flex-1">
                                             <TextInput
+                                                style={{
+                                                    fontFamily: 'LightFont',
+                                                }}
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="first_name"
                                                 placeholder={t('firstName')}
@@ -193,6 +214,9 @@ const RegisterScreen = ({route, navigation}) => {
                                         </View>
                                         <View className="flex-1">
                                             <TextInput
+                                                style={{
+                                                    fontFamily: 'LightFont',
+                                                }}
                                                 className='bg-white border border-black rounded-lg h-12 px-4'
                                                 name="last_name"
                                                 placeholder={t('lastName')}
@@ -209,6 +233,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     </View>
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="phone"
                                             placeholder={t('enterYourPhoneNumber')}
@@ -225,6 +252,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     </View>
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="email"
                                             placeholder={t('enterYourEmail')}
@@ -240,6 +270,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     </View>
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="confirm_email"
                                             placeholder={t('confirmEmail')}
@@ -256,6 +289,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     <View>
                                         <View className="flex-row justify-center items-center">
                                             <TextInput
+                                                style={{
+                                                    fontFamily: 'LightFont',
+                                                }}
                                                 className='flex-1 bg-white border border-black rounded-lg h-12 px-4'
                                                 name="password"
                                                 placeholder={t('enterYourPassword')}
@@ -279,6 +315,9 @@ const RegisterScreen = ({route, navigation}) => {
                                     </View>
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="confirm_password"
                                             placeholder={t('confirmPassword')}
@@ -295,21 +334,41 @@ const RegisterScreen = ({route, navigation}) => {
                                     </View>
                                 </View>
 
-                                <Pressable
-                                    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                                    onPress={() => {
-                                        handleSubmit()
-                                    }}
-                                >
-                                    <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>{t('submit')}</Text>
-                                    </View>
-                                </Pressable>
+                                {/*<Pressable*/}
+                                {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                                {/*    onPress={() => {*/}
+                                {/*        handleSubmit()*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <View className='flex-1 flex items-center'>*/}
+                                {/*        <Text style={{*/}
+                                {/*            fontFamily: 'LightFont',*/}
+                                {/*        }} className='text-white text-base font-medium'>{t('submit')}</Text>*/}
+                                {/*    </View>*/}
+                                {/*</Pressable>*/}
+                                <ImageBackground
+                                    className={"w-full rounded-xl h-16 mb-1"}
+                                    source={require('../../../assets/button-bg.png')}
+                                    resizeMode={'contain'}>
+                                    <Pressable
+                                        className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                        onPress={() => {
+                                            handleSubmit()
+                                        }}
+                                    >
+                                        <View className='flex-1 flex items-center'>
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='text-white text-base font-medium'>{t('submit')}</Text>
+                                        </View>
+                                    </Pressable>
+                                </ImageBackground>
                             </View>
                         )}
                     </Formik>
             </ScrollView>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

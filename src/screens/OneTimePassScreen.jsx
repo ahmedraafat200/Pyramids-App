@@ -1,5 +1,15 @@
 import React, {useContext, useState} from "react";
-import {Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View} from "react-native";
+import {
+    Image,
+    ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import {AuthContext} from "../context/AuthContext";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {useTranslation} from "react-i18next";
@@ -9,6 +19,9 @@ import axiosInstance from "../axiosInstance";
 import ViewShot from "react-native-view-shot";
 import * as Sharing from 'expo-sharing';
 import {AntDesign} from "@expo/vector-icons";
+import i18next from "../../services/i18next";
+import {useNavigation} from "@react-navigation/native";
+
 
 
 const registerValidationSchema = yup.object().shape({
@@ -26,6 +39,7 @@ const OneTimePassScreen = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [code, setCode] = useState({});
     const viewShot = React.useRef();
+    const {toggleDrawer, closeDrawer, openDrawer, goBack} = useNavigation();
 
     const captureAndShareScreenshot = () => {
         viewShot.current.capture().then((uri) => {
@@ -58,6 +72,16 @@ const OneTimePassScreen = ({route, navigation}) => {
     }
 
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6">
+                    <Image source={require('../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
@@ -79,7 +103,9 @@ const OneTimePassScreen = ({route, navigation}) => {
                             onPress={captureAndShareScreenshot}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white" />
                             </View>
                         </Pressable>
@@ -101,6 +127,9 @@ const OneTimePassScreen = ({route, navigation}) => {
                                 <View className="flex flex-col space-y-4 mt-10 w-full">
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="guest_name"
                                             placeholder={t('enterGuestName')}
@@ -110,12 +139,17 @@ const OneTimePassScreen = ({route, navigation}) => {
                                             value={values.guest_name}
                                         />
                                         {errors.guest_name &&
-                                            <Text className='px-4'
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.guest_name}</Text>
                                         }
                                     </View>
                                     <View>
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="guest_ride"
                                             placeholder={t('enterGuestRide')}
@@ -125,28 +159,50 @@ const OneTimePassScreen = ({route, navigation}) => {
                                             value={values.guest_ride}
                                         />
                                         {errors.guest_ride &&
-                                            <Text className='px-4'
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='px-4'
                                                   style={{fontSize: 10, color: 'red'}}>{errors.guest_ride}</Text>
                                         }
                                     </View>
                                 </View>
 
-                                <Pressable
-                                    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                                    onPress={() => {
-                                        handleSubmit()
-                                    }}
-                                >
-                                    <View className='flex-1 flex items-center'>
-                                        <Text className='text-white text-base font-medium'>{t('invite')}</Text>
-                                    </View>
-                                </Pressable>
+                                {/*<Pressable*/}
+                                {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                                {/*    onPress={() => {*/}
+                                {/*        handleSubmit()*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <View className='flex-1 flex items-center'>*/}
+                                {/*        <Text style={{*/}
+                                {/*            fontFamily: 'LightFont',*/}
+                                {/*        }} className='text-white text-base font-medium'>{t('invite')}</Text>*/}
+                                {/*    </View>*/}
+                                {/*</Pressable>*/}
+                                <ImageBackground
+                                    className={"rounded-xl h-16 mb-1  w-full"}
+                                    source={require('../../assets/button-bg.png')}
+                                    resizeMode={'contain'}>
+                                    <Pressable
+                                        className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                        onPress={() => {
+                                            handleSubmit()
+                                        }}
+                                    >
+                                        <View className='flex-1 flex items-center'>
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='text-white text-base font-medium'>{t('invite')}</Text>
+                                        </View>
+                                    </Pressable>
+                                </ImageBackground>
                             </View>
                         )}
                     </Formik>
                 }
             </ScrollView>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

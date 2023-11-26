@@ -1,5 +1,14 @@
 import React, {useContext, useRef, useState} from "react";
-import {KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View} from "react-native";
+import {
+    ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import {AuthContext} from "../../context/AuthContext";
 import {Image} from "react-native-animatable";
 import {useTranslation} from "react-i18next";
@@ -10,6 +19,8 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import OTPTextView from "react-native-otp-textinput";
 import Toast from "react-native-toast-message";
 import * as Clipboard from 'expo-clipboard';
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../../services/i18next";
 
 
 
@@ -18,6 +29,7 @@ const OtpVerification = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [otpInput, setOtpInput] = useState("");
+    const { toggleDrawer,closeDrawer,openDrawer, goBack} = useNavigation();
 
     const input = useRef(null);
     const handleCellTextChange = async (text, i) => {
@@ -56,13 +68,22 @@ const OtpVerification = ({route, navigation}) => {
     }
 
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6">
+                    <Image source={require('../../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={2} totalSteps={3}/>
+            <Steps classNames="pt-10" step={2} totalSteps={3}/>
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
-                <View className="flex-1 justify-between px-10 items-center bg-white">
+                <View className="flex-1 justify-between px-10 items-center">
                     <View className="items-center w-full mt-8">
                         <View className="rounded-full border-blue-500 border bg-blue-600 p-4">
                             <MaterialCommunityIcons name="lock-open-variant-outline" size={80} color="white"/>
@@ -81,19 +102,39 @@ const OtpVerification = ({route, navigation}) => {
                         </View>
                     </View>
 
-                    <Pressable
-                        className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                        onPress={() => {
-                            validateOtp(otpInput)
-                        }}
-                    >
-                        <View className='flex-1 flex items-center'>
-                            <Text className='text-white text-base font-medium'>Proceed</Text>
-                        </View>
-                    </Pressable>
+                    {/*<Pressable*/}
+                    {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                    {/*    onPress={() => {*/}
+                    {/*        validateOtp(otpInput)*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    <View className='flex-1 flex items-center'>*/}
+                    {/*        <Text style={{*/}
+                    {/*            fontFamily: 'LightFont',*/}
+                    {/*        }} className='text-white text-base font-medium'>Proceed</Text>*/}
+                    {/*    </View>*/}
+                    {/*</Pressable>*/}
+                    <ImageBackground
+                        className={"w-full rounded-xl h-16 mb-1"}
+                        source={require('../../../assets/button-bg.png')}
+                        resizeMode={'contain'}>
+                        <Pressable
+                            className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                            onPress={() => {
+                                validateOtp(otpInput)
+                            }}
+                        >
+                            <View className='flex-1 flex items-center'>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-white text-base font-medium'>{t('proceed')}</Text>
+                            </View>
+                        </Pressable>
+                    </ImageBackground>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

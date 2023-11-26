@@ -5,14 +5,13 @@ import StepCurrent from '../../../assets/steps/stepcurrent.png';
 import StepDone from '../../../assets/steps/stepdone.png';
 import StepNext from '../../../assets/steps/stepnext.png';
 
-const bgColor = "#0069FF";
 const lineNext = "#b3bac5";
 const lineDone = "#004FC0";
 
 const Steps = ({step, totalSteps, classNames}) => {
    
     return (
-        <View backgroundColor={bgColor} style={styles.navigator} className={classNames}>
+        <View style={styles.navigator} className={classNames}>
             {[...Array(totalSteps - 1)].map((e,i) => {
               return (
                 <React.Fragment key={i}>

@@ -5,7 +5,7 @@ import {
     Button,
     Dimensions,
     FlatList,
-    Image, Pressable, RefreshControl, Share,
+    Image, ImageBackground, Pressable, RefreshControl, Share,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -24,6 +24,8 @@ import ViewShot from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import async from "async";
 import {useTranslation} from "react-i18next";
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../services/i18next";
 
 const ScreenWidth = Dimensions.get("window").width;
 
@@ -39,6 +41,7 @@ const InvitationsScreen = ({route, navigation}) => {
     const [qrCode, setQrCode] = useState('');
     const [gateData, setGateData] = useState(null);
     const viewShot = useRef();
+    const { toggleDrawer,closeDrawer,openDrawer } = useNavigation();
 
     const captureAndShareScreenshot = () => {
         viewShot.current.capture().then((uri) => {
@@ -67,30 +70,44 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('generatedAt')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                         <View className="flex-row items-center">
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('activeFrom')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.from}
                             </Text>
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('to')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.to}
                             </Text>
                         </View>
                     </View>
                     <View className='ml-auto'>
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
@@ -110,16 +127,22 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('generatedAt')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                     </View>
                     <View className='ml-auto'>
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
@@ -140,34 +163,48 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 justify-between items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('generatedAt')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                         <View className="flex-row items-center justify-between">
                             <View className="flex-row items-center">
-                                <Text className='text-sm'>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-sm'>
                                     {t('guest')}
                                 </Text>
-                                <Text className='text-sm text-black font-bold capitalize'>
+                                <Text style={{
+                                    fontFamily: 'BoldFont',
+                                }} className='text-sm text-black font-bold capitalize'>
                                     {item.guest_name}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">
-                                <Text className='text-xs'>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-xs'>
                                     {t('ride')}
                                 </Text>
-                                <Text className='text-sm text-black font-bold capitalize'>
+                                <Text style={{
+                                    fontFamily: 'BoldFont',
+                                }} className='text-sm text-black font-bold capitalize'>
                                     {item.guest_ride}
                                 </Text>
                             </View>
                         </View>
                     </View>
                     <View className="">
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
@@ -187,26 +224,36 @@ const InvitationsScreen = ({route, navigation}) => {
                 <View className='flex-row py-1 px-1 justify-between items-center'>
                     <View className="space-y-1">
                         <View className="flex-row items-center">
-                            <Text className='text-xs'>
+                            <Text style={{
+                                fontFamily: 'LightFont',
+                            }} className='text-xs'>
                                 {t('generatedAt')}
                             </Text>
-                            <Text className='text-sm text-black font-bold capitalize'>
+                            <Text style={{
+                                fontFamily: 'BoldFont',
+                            }} className='text-sm text-black font-bold capitalize'>
                                 {item.generated_at}
                             </Text>
                         </View>
                         <View className="flex-row items-center justify-between">
                             <View className="flex-row items-center">
-                                <Text className='text-sm'>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-sm'>
                                     {t('guest')}
                                 </Text>
-                                <Text className='text-sm text-black font-bold capitalize'>
+                                <Text style={{
+                                    fontFamily: 'BoldFont',
+                                }} className='text-sm text-black font-bold capitalize'>
                                     {item.guest_name}
                                 </Text>
                             </View>
                         </View>
                     </View>
                     <View className="">
-                        <Text
+                        <Text style={{
+                            fontFamily: 'BoldFont',
+                        }}
                             className="bg-gray-900 text-gray-100 py-2 px-2 rounded-full text-sm font-bold capitalize">{item.codeStatus}</Text>
                     </View>
                 </View>
@@ -272,7 +319,9 @@ const InvitationsScreen = ({route, navigation}) => {
                             onPress={captureAndShareScreenshot}
                         >
                             <View className='flex-row items-center w-full justify-center space-x-2'>
-                                <Text className='text-white text-base font-medium'>{t('share')}</Text>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className='text-white text-base font-medium'>{t('share')}</Text>
                                 <AntDesign name="sharealt" size={20} color="white"/>
                             </View>
                         </Pressable>
@@ -305,36 +354,52 @@ const InvitationsScreen = ({route, navigation}) => {
                             <>
                                 <View className="flex-1 items-center space-y-3 justify-center">
                                     <View className="flex-row items-center space-x-1">
-                                        <Text className='text-xs capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-xs capitalize'>
                                             {t('guest')} :
                                         </Text>
-                                        <Text className='text-sm text-black font-bold capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'BoldFont',
+                                        }} className='text-sm text-black font-bold capitalize'>
                                             {gateData.guest_name}
                                         </Text>
                                     </View>
                                     <View className="flex-row items-center space-x-1">
-                                        <Text className='text-xs capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-xs capitalize'>
                                             {t('from')} :
                                         </Text>
-                                        <Text className='text-sm text-black font-bold capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'BoldFont',
+                                        }} className='text-sm text-black font-bold capitalize'>
                                             {gateData.from}
                                         </Text>
                                         <Text> - </Text>
-                                        <Text className='text-xs capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-xs capitalize'>
                                             {t('to')} :
                                         </Text>
-                                        <Text className='text-sm text-black font-bold capitalize'>
+                                        <Text style={{
+                                            fontFamily: 'BoldFont',
+                                        }} className='text-sm text-black font-bold capitalize'>
                                             {gateData.to}
                                         </Text>
                                     </View>
-                                    <Text className='text-sm'>{gateData.description}</Text>
+                                    <Text style={{
+                                        fontFamily: 'LightFont',
+                                    }} className='text-sm'>{gateData.description}</Text>
                                 </View>
                                 <Pressable
                                     className='h-12 bg-black rounded-md flex-row justify-center items-center m-4 px-6'
                                     onPress={changeInvitationStatus}
                                 >
                                     <View className='flex-row items-center w-full justify-center space-x-2'>
-                                        <Text
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }}
                                             className='text-white text-base font-medium'>{gateData.codeStatus === "active" ? t('disable') : t('activate')}</Text>
                                     </View>
                                 </Pressable>
@@ -386,6 +451,8 @@ const InvitationsScreen = ({route, navigation}) => {
                 activeColor={'white'}
                 inactiveColor={'gray'}
                 style={{paddingTop: StatusBar.currentHeight, backgroundColor: 'black'}}
+                labelStyle={{fontFamily: 'BoldFont'}}
+                className={'mt-1'}
             />
         );
     };
@@ -481,7 +548,16 @@ const InvitationsScreen = ({route, navigation}) => {
     }, [])
 
     return (
-        <View className='flex-1 bg-white'>
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6">
+                    <Image source={require('../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
+        <View className='flex-1'>
             <Spinner visible={isLoading}/>
             <TabView
                 navigationState={{index, routes}}
@@ -491,6 +567,7 @@ const InvitationsScreen = ({route, navigation}) => {
                 initialLayout={{width: layout.width}}
             />
         </View>
+        </ImageBackground>
     );
 };
 

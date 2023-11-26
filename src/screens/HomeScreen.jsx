@@ -1,5 +1,15 @@
 import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {Button, Dimensions, Image, Share, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    Button,
+    Dimensions, FlatList,
+    Image,
+    ImageBackground, Pressable, RefreshControl,
+    Share,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from "../context/AuthContext";
 import {AntDesign, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons} from '@expo/vector-icons';
@@ -7,67 +17,40 @@ import axiosInstance from "../axiosInstance";
 import BottomSheet, {BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {use} from "i18next";
 import {useTranslation} from "react-i18next";
+import {useNavigation} from "@react-navigation/native";
+import Carousel from "react-native-reanimated-carousel/src/Carousel";
+import {ResizeMode, Video} from "expo-av";
+import {navigationRef} from "../RootNavigation";
+import i18next from "../../services/i18next";
+import PaginationDot from 'react-native-animated-pagination-dot'
+
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const HomeScreen = ({route, navigation}) => {
     const {t} = useTranslation();
     const {user} = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(false)
-    const [accessData, setAccessData] = useState({})
-
-    function generateFamilyCode() {
-        setIsLoading(true);
-        let formData = new FormData();
-        formData.append('userId', user.userId);
-        formData.append('role', user.role);
-        formData.append('invitaion_type', 'family');
-        axiosInstance.post(`/create_invitation_family_renter.php`, formData, {
-            headers: {"Content-Type": "multipart/form-data"}
-        })
-            .then(response => {
-                if (response.data.status === 'OK') {
-                    Share.share({
-                        message: t('youCanUseThisCodeToLoginAndCreateYourAccountCode', {code: response.data.code})
-                    })
-                }
-                setIsLoading(false);
-            })
-            .catch(error => {
-                setIsLoading(false);
-            })
-    }
-
-    function userAccess() {
-        setIsLoading(true);
-        let formData = new FormData();
-        formData.append('userId', user.userId);
-        formData.append('role', user.role);
-
-        axiosInstance.post(`/user_identity.php`, formData, {
-            headers: {"Content-Type": "multipart/form-data"}
-        })
-            .then(response => {
-                setIsLoading(false);
-                setAccessData(response.data.data);
-            })
-            .catch(error => {
-                setIsLoading(false);
-            })
-    }
-
-    const userAccessModalRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const {toggleDrawer, closeDrawer, openDrawer} = useNavigation();
+    const width = Dimensions.get('window').width;
+    const [ads, setAds] = useState([])
+    const [newsItem, setNewsItem] = useState({})
+    const [newsHome, setNewsHome] = useState({})
+    const [news, setNews] = useState([])
+    const [media, setMedia] = useState([])
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const video = React.useRef(null);
+    const [status, setStatus] = React.useState({});
     const inviteModalRef = useRef(null);
+    const [curPage, setCurPage] = useState(0);
+    const [curPageMedia, setCurPageMedia] = useState(0);
+    const carouselRef = useRef(null);
+    const carouselRefMedia = useRef(null);
 
-    // callbacks
-    const handleUserAccessModalPress = useCallback(() => {
-        userAccess();
-        userAccessModalRef.current?.present();
-    }, []);
-
-    const handleInviteModalPress = useCallback(() => {
+    const handleInviteModalPress = useCallback((item) => () => {
+        setNewsItem(item)
         inviteModalRef.current?.present();
-    }, []);
+    }, [newsItem, setNewsItem]);
 
     const handleSheetChanges = useCallback((index) => {
     }, []);
@@ -83,194 +66,206 @@ const HomeScreen = ({route, navigation}) => {
         []
     );
 
+
+    function getHomeData() {
+        setIsLoading(true);
+        let formData = new FormData();
+        formData.append('userId', user.userId);
+        formData.append('role', user.role);
+
+        axiosInstance.post(`/get_home_page.php`, formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        })
+            .then(response => {
+                if (response.data.data) {
+                    setAds(response.data.data.ads);
+                    setNews(response.data.data.news);
+                    setMedia(response.data.data.media);
+                    setNewsHome(response.data.data.news.pop())
+                }
+                console.log(newsHome, 'news home')
+                setIsLoading(false);
+            })
+            .catch(error => {
+                setIsLoading(false);
+            })
+    }
+
     useEffect(() => {
+        getHomeData();
         // getRemainingPayment();
         // getNextSession();
     }, [])
 
+    // const renderNews = ({item}) => (
+    //     <TouchableOpacity
+    //         onPress={handleInviteModalPress(item)}>
+    //         <View className="flex-row gap-4 px-4 py-1">
+    //             <Image className={"w-24 h-24 rounded-xl"} resizeMode="cover" source={{uri: item.itemPhotoUrl}}/>
+    //             {/*<Text className="text-white self-center">01</Text>*/}
+    //             <View className="flex-1">
+    //                 <Text style={{color: '#cdc6ce', fontFamily: 'BoldFont'}}
+    //                       className="text-lg text-white">{item.itemTitle}</Text>
+    //                 <Text numberOfLines={3} ellipsizeMode='tail' style={{color: '#7a6f81', fontFamily: 'LightFont'}}
+    //                       className="text-base text-white">{item.itemDescription.trim()}</Text>
+    //             </View>
+    //         </View>
+    //     </TouchableOpacity>
+    // );
+
     return (
-        <View className='flex-1 bg-white space-y-2'>
-            <Spinner visible={isLoading}/>
-            <View className='bg-gray-50 rounded-xl max-w-full px-4 py-6 mx-2 mt-3 mb-1'
-                  style={[
-                      styles.cardShadow
-                  ]}
+        <>
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../assets/home-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6">
+                    <Image source={require('../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
+            <View className='flex-1 space-y-4'>
+                <Spinner visible={isLoading}/>
+                <View className={"px-4"}>
+                    <Carousel
+                        ref={carouselRef}
+                        loop
+                        width={width - 32}
+                        height={width / 2}
+                        autoPlay={true}
+                        autoPlayInterval={4000}
+                        data={ads}
+                        scrollAnimationDuration={2000}
+                        onProgressChange={(_offsetProgress, absoluteProgress) => {
+                            const currentIndex = carouselRef.current?.getCurrentIndex() || 0;
+
+                            if (absoluteProgress > 0.25 || currentIndex === 0) {
+                                setCurPage(currentIndex);
+                            }
+                        }}
+                        renderItem={({item}) => (
+                            <View className={"flex-1 justify-center bg-white rounded-xl"}>
+                                <Image className={'flex-1 w-full'} source={{uri: item.itemPhotoUrl}}
+                                       resizeMode={"contain"}/>
+                            </View>
+                        )}
+                    />
+                    <View className={"self-center"}>
+                    <PaginationDot
+                        activeDotColor={'#cbc19e'}
+                        curPage={curPage}
+                        maxPage={ads.length}
+                    />
+                    </View>
+                </View>
+                <View className={"pb-4"} style={{backgroundColor: '#170922'}}>
+                    <View className={"flex-row justify-between items-center"}>
+                        <Text style={{color: '#cbc19e', fontFamily: 'BoldFont'}} className={"px-4 py-2 text-lg"}>{t('news')}</Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate('News')}}>
+                            <Text style={{color: '#cbc19e', fontFamily: 'BoldFont'}} className={"px-4 py-2 text-base"}>{t('readMore')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {newsHome.itemTitle && (
+                    <TouchableOpacity
+                        onPress={handleInviteModalPress(newsHome)}>
+                        <View className="flex-row gap-4 px-4 py-1">
+                            <Image className={"w-24 h-24 rounded-xl"} resizeMode="cover" source={{uri: newsHome.itemPhotoUrl}}/>
+                            {/*<Text className="text-white self-center">01</Text>*/}
+                            <View className="flex-1">
+                                <Text style={{color: '#cdc6ce', fontFamily: 'BoldFont'}}
+                                      className="text-lg text-white">{newsHome.itemTitle}</Text>
+                                <Text numberOfLines={3} ellipsizeMode='tail' style={{color: '#7a6f81', fontFamily: 'LightFont'}}
+                                      className="text-base text-white">{newsHome.itemDescription.trim()}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    )}
+                    {/*<FlatList*/}
+                    {/*    data={news.slice(0, 2)}*/}
+                    {/*    renderItem={renderNews}*/}
+                    {/*    keyExtractor={item => item.itemId}*/}
+                    {/*    refreshControl={*/}
+                    {/*        <RefreshControl refreshing={isRefreshing} onRefresh={() => getHomeData()}/>*/}
+                    {/*    }/>*/}
+                </View>
+                <View className={"px-4 mb-5 pb-5"}  style={{backgroundColor: '#63236f'}}>
+                    <Text style={{color: '#cbc19e', fontFamily: 'BoldFont'}} className={"py-1 text-lg"}>{t('media')}</Text>
+                    <Carousel
+                        ref={carouselRefMedia}
+                        loop
+                        width={width - 32}
+                        height={width / 2}
+                        autoPlay={true}
+                        autoPlayInterval={6000}
+                        data={media}
+                        scrollAnimationDuration={2000}
+                        onSnapToItem={(index) => {
+                        }}
+                        onProgressChange={(_offsetProgress, absoluteProgress) => {
+                            const currentIndex = carouselRefMedia.current?.getCurrentIndex() || 0;
+
+                            if (absoluteProgress > 0.25 || currentIndex === 0) {
+                                setCurPageMedia(currentIndex);
+                            }
+                        }}
+                        renderItem={({item}) => (
+                            <View className={"flex-1 justify-center "}>
+                                <Text style={{color: '#cdc6ce', fontFamily: 'BoldFont'}} className={"py-1 text-lg"}>{item.itemTitle}</Text>
+                                <Video
+                                    className={"flex-1 w-full rounded-xl"}
+                                    ref={video}
+                                    // style={styles.video}
+                                    source={{
+                                        uri: item.itemPhotoUrl,
+                                    }}
+                                    useNativeControls
+                                    resizeMode={ResizeMode.CONTAIN}
+                                    isLooping
+                                    onPlaybackStatusUpdate={status => setStatus(() => status)}
+                                />
+                            </View>
+                        )}
+                    />
+                    <View className={"self-center"}>
+                        <PaginationDot
+                            activeDotColor={'#cbc19e'}
+                            curPage={curPageMedia}
+                            maxPage={media.length}
+                        />
+                    </View>
+                </View>
+            </View>
+        </ImageBackground>
+
+    <BottomSheetModalProvider>
+        <View className="justify-center">
+            <BottomSheetModal
+                ref={inviteModalRef}
+                index={1}
+                snapPoints={useMemo(() => ['25%', '90%'], [])}
+                snapPoints={useMemo(() => ['25%', '90%'], [])}
+                backdropComponent={renderBackdrop}
+                onChange={handleSheetChanges}
             >
-                <View className='flex-row py-1 px-2 items-center'>
-                    <Text className='text-base'>
-                        {t('welcome')}
-                    </Text>
-                    <Text className='text-lg text-black font-bold capitalize'>
-                        {user.first_name}
-                    </Text>
-                    <View className='ml-auto'>
-                        <MaterialCommunityIcons name="hand-wave-outline" size={30} color="black"/>
-                    </View>
+                <View className="flex-1 justify-center px-6 space-y-3">
+                    {newsItem.itemTitle &&
+                        <>
+                        <Image className={"w-24 h-24 rounded-xl self-center"} resizeMode="cover" source={{uri: newsItem.itemPhotoUrl}}/>
+                        <View className="flex-1 py-1 items-center">
+                        <Text style={{color: '#000000', fontFamily: 'BoldFont'}}
+                        className="text-lg text-white">{newsItem.itemTitle}</Text>
+                        <Text style={{color: '#7a6f81', fontFamily: 'LightFont'}}
+                        className="text-base text-white">{newsItem.itemDescription}</Text>
+                        </View>
+                        </>
+                    }
                 </View>
-            </View>
-            <View className='flex-row justify-center items-center space-x-4'>
-                <TouchableOpacity
-                    onPress={handleUserAccessModalPress}>
-                    <View
-                        className='bg-gray-50 rounded-xl py-2 my-2'
-                        style={[
-                            styles.cardShadow, styles.item
-                        ]}
-                    >
-                        <View className='py-1 items-center space-y-2'>
-                            <View className=''>
-                                <MaterialCommunityIcons name="cellphone-key" size={35} color="black"/>
-                            </View>
-                            <Text className='text-base font-medium '>
-                                {t('myAccess')}
-                            </Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={handleInviteModalPress}>
-                    <View
-                        className='bg-gray-50 rounded-xl py-2 my-2'
-                        style={[
-                            styles.cardShadow, styles.item
-                        ]}
-                    >
-                        <View className='py-1 items-center space-y-2'>
-                            <View className=''>
-                                <SimpleLineIcons name="envelope-letter" size={34} color="black"/>
-                            </View>
-                            <Text className='text-base font-medium '>
-                                {t('invite')}
-                            </Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('Invitations')}
-                >
-                    <View
-                        className='bg-gray-50 rounded-xl py-2 my-2'
-                        style={[
-                            styles.cardShadow, styles.item
-                        ]}
-                    >
-                        <View className='py-1 items-center space-y-2'>
-                            <View className=''>
-                                <MaterialIcons name="insert-invitation" size={35} color="black"/>
-                            </View>
-                            <Text className='text-base font-medium '>
-                                {t('invitations')}
-                            </Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </View>
-
-
-            <BottomSheetModalProvider>
-                <View className="flex-1 p-24 justify-center">
-                    <BottomSheetModal
-                        ref={userAccessModalRef}
-                        index={1}
-                        snapPoints={useMemo(() => ['25%', '75%'], [])}
-                        backdropComponent={renderBackdrop}
-                        onChange={handleSheetChanges}
-                    >
-                        <View className="flex-1 items-center space-y-1">
-                            {accessData.first_name ?
-                                <>
-                                    <Text
-                                        className="capitalize text-xl font-medium">{accessData.first_name + ' ' + accessData.last_name}</Text>
-                                    <Text
-                                        className="text-base font-medium">{accessData.project + ' - ' + accessData.unit}</Text>
-                                    <Image className="flex-1 w-full"
-                                           resizeMode={"contain"}
-                                           source={{uri: 'data:image/png;base64,' + accessData.qrcode}}/>
-                                </> : null
-                            }
-                        </View>
-                    </BottomSheetModal>
-                </View>
-
-                <View className="flex-1 p-6 justify-center">
-                    <BottomSheetModal
-                        ref={inviteModalRef}
-                        index={1}
-                        snapPoints={useMemo(() => ['25%', '60%'], [])}
-                        backdropComponent={renderBackdrop}
-                        onChange={handleSheetChanges}
-                    >
-                        <View className="flex-1 justify-center px-6 space-y-3">
-                            {user.role === "owner" &&
-                                <View className="space-y-3">
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate('TimedPass')}
-                                    >
-                                        <View
-                                            className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
-                                        >
-                                            <Text className='self-center text-base font-medium '>
-                                                {t('tenant')}
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => generateFamilyCode()}
-                                    >
-                                        <View
-                                            className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
-                                        >
-                                            <Text className='self-center text-base font-medium '>
-                                                {t('family')}
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            }
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('OneTimePass')}
-                            >
-                                <View
-                                    className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
-                                >
-                                    <Text className='self-center text-base font-medium '>
-                                        {t('oneTimePass')}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('GatePermission')}
-                            >
-                                <View
-                                    className='w-full justify-center rounded-xl px-3 h-16 border-gray-300 border'
-                                >
-                                    <Text className='self-center text-base font-medium '>
-                                        {t('gatePermission')}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </BottomSheetModal>
-                </View>
-            </BottomSheetModalProvider>
+            </BottomSheetModal>
         </View>
+    </BottomSheetModalProvider>
+        </>
     );
 };
-
-const styles = StyleSheet.create({
-    cardShadow: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 3,
-    },
-    item: {
-        width: (ScreenWidth - 32) / 3 - 6,
-    }
-});
 
 export default HomeScreen;

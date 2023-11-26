@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View} from "react-native";
+import {
+    Image,
+    ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import {AuthContext} from "../../context/AuthContext";
 import Spinner from 'react-native-loading-spinner-overlay';
 import {useTranslation} from "react-i18next";
@@ -9,6 +19,9 @@ import DropDownFormik from "../../components/DropDownFormik";
 import Steps from "../../components/Steps";
 import axiosInstance from "../../axiosInstance";
 import userImage from "../../../assets/user.png";
+import {useNavigation} from "@react-navigation/native";
+import i18next from "../../../services/i18next";
+
 
 const registerValidationSchema = yup.object().shape({
     project: yup
@@ -34,6 +47,7 @@ const RegisterValidationScreen = ({route, navigation}) => {
         {label: 'Sky City', value: 'Sky City'}
     ]);
     const [unitItems, setUnitItems] = useState([]);
+    const { toggleDrawer,closeDrawer,openDrawer, goBack} = useNavigation();
 
     function getUnits() {
         setIsLoading(true);
@@ -92,12 +106,21 @@ const RegisterValidationScreen = ({route, navigation}) => {
         getUnits();
     }, [])
     return (
+        <ImageBackground className={"flex-1 w-full"}
+                         resizeMode='cover'
+                         source={require('../../../assets/login-bg.png')}>
+            <View className={"flex-row items-center mt-8 px-4"}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6">
+                    <Image source={require('../../../assets/menu-button.png')}/>
+                </Pressable>
+            </View>
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             className="flex-1">
             <Spinner visible={isLoading}/>
-            <Steps classNames="pt-10 bg-white" step={ownerData.ownerId ? 2 : 1} totalSteps={ownerData.ownerId ? 3 : 2}/>
-            <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <Steps classNames="pt-10" step={ownerData.ownerId ? 2 : 1} totalSteps={ownerData.ownerId ? 3 : 2}/>
+            <View className="flex-1" contentContainerStyle={{flexGrow: 1}}>
                 <Formik
                     validationSchema={registerValidationSchema}
                     initialValues={{project: ownerData.project ?? '', unit: ownerData.unit ?? '', national_id: ''}}
@@ -111,9 +134,11 @@ const RegisterValidationScreen = ({route, navigation}) => {
                           errors,
                           isValid,
                       }) => (
-                        <View className="flex-1 justify-between px-10 items-center bg-white">
+                        <View className="flex-1 justify-between px-10 items-center">
                             <View className="flex flex-col space-y-4 w-full">
-                                <Text className='self-center text-2xl font-bold mt-4 mb-8 text-slate-900'>{t('ownerValidation')}</Text>
+                                <Text style={{
+                                    fontFamily: 'BoldFont',
+                                }} className='self-center text-2xl font-bold mt-4 mb-8 text-slate-900'>{t('ownerValidation')}</Text>
                                 {ownerData.name ?
                                     <View className="">
                                         <Image className="self-center"
@@ -128,6 +153,9 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                                }}
                                         />
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="owner_name"
                                             value={ownerData.name}
@@ -135,9 +163,12 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                         />
                                     </View> : null
                                 }
-                                <View>
+                                <View style={{zIndex: 2000}}>
                                     {ownerData.project ?
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="project"
                                             onChangeText={handleChange('project')}
@@ -151,14 +182,19 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                             items={projectItems}
                                         />}
                                     {errors.project &&
-                                        <Text className='px-4'
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.project}</Text>
                                     }
                                 </View>
 
-                                <View>
+                                <View style={{zIndex: 1000}}>
                                     {ownerData.unit ?
                                         <TextInput
+                                            style={{
+                                                fontFamily: 'LightFont',
+                                            }}
                                             className='bg-white border border-black rounded-lg h-12 px-4'
                                             name="unit"
                                             onChangeText={handleChange('unit')}
@@ -170,15 +206,19 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                             name="unit"
                                             placeholder={t('selectYourUnit')}
                                             items={unitItems}
-                                            zIndex={50}
                                         />}
                                     {errors.unit &&
-                                        <Text className='px-4'
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.unit}</Text>
                                     }
                                 </View>
                                 <View>
                                     <TextInput
+                                        style={{
+                                            fontFamily: 'LightFont',
+                                        }}
                                         className='bg-white border border-black rounded-lg h-12 px-4'
                                         name="national_id"
                                         placeholder={t('enterYourNationalId')}
@@ -189,27 +229,49 @@ const RegisterValidationScreen = ({route, navigation}) => {
                                         keyboardType="numeric"
                                     />
                                     {errors.national_id &&
-                                        <Text className='px-4'
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='px-4'
                                               style={{fontSize: 10, color: 'red'}}>{errors.national_id}</Text>
                                     }
                                 </View>
                             </View>
 
-                            <Pressable
-                                className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'
-                                onPress={() => {
-                                    handleSubmit()
-                                }}
-                            >
-                                <View className='flex-1 flex items-center'>
-                                    <Text className='text-white text-base font-medium'>{t('proceed')}</Text>
-                                </View>
-                            </Pressable>
+                            {/*<Pressable*/}
+                            {/*    className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-4 px-6'*/}
+                            {/*    onPress={() => {*/}
+                            {/*        handleSubmit()*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    <View className='flex-1 flex items-center'>*/}
+                            {/*        <Text style={{*/}
+                            {/*            fontFamily: 'LightFont',*/}
+                            {/*        }} className='text-white text-base font-medium'>{t('proceed')}</Text>*/}
+                            {/*    </View>*/}
+                            {/*</Pressable>*/}
+                            <ImageBackground
+                                className={"w-full rounded-xl h-16 mb-1"}
+                                source={require('../../../assets/button-bg.png')}
+                                resizeMode={'contain'}>
+                                <Pressable
+                                    className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                    onPress={() => {
+                                        handleSubmit()
+                                    }}
+                                >
+                                    <View className='flex-1 flex items-center'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-white text-base font-medium'>{t('proceed')}</Text>
+                                    </View>
+                                </Pressable>
+                            </ImageBackground>
                         </View>
                     )}
                 </Formik>
-            </ScrollView>
+            </View>
         </KeyboardAvoidingView>
+        </ImageBackground>
     );
 };
 

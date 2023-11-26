@@ -1,6 +1,6 @@
 {
   "login": "تسجيل الدخول",
-  "loginByCode": "تسجيل الدخول بكود دعوه",
+  "loginByCode": "بكود دعوه",
   "resetPassword": "تغيير كلمة المرور",
   "dontHaveAnAccount": "ليس لديك حساب؟",
   "signup": "انشاء حساب",
@@ -45,6 +45,7 @@
   "enterEndDate": "ادخال تاريخ نهاية المده",
   "enterStartDate": "ادخال تاريخ بداية المده",
   "oneTime": "مره واحده",
+  "gate": "بوابة",
   "welcome": "مرحبا ",
   "generatedAt": "تاريخ الدعوه",
   "guest": "اسم المدعو: ",
@@ -53,5 +54,17 @@
   "to": " الى ",
   "home": "الرئيسية",
   "profile": "حسابى",
-  "updatePicture": "تغيير الصورة"
+  "updatePicture": "تغيير الصورة",
+  "gatePermission": "تصريح البوابه",
+  "activate": "تفعيل",
+  "disable": "الغاء",
+  "phoneVerification": "تأكيد رقم الموبايل",
+  "yes": "نعم",
+  "no": "لا",
+  "deleteMyAccount": "طلب مسح جميع بياناتى",
+  "deleteConfirmation": "تأكيد المسح",
+  "areYouSureYouWantToDeleteYourAccount": "هل انت متأكد من ارسال طلب مسح جميع البيانات؟",
+  "news": "الاخبار",
+  "readMore": "عرض المزيد..",
+  "media": "الوسائط"
 }
