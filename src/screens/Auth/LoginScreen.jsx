@@ -20,6 +20,7 @@ import {Formik} from "formik";
 import Spinner from "react-native-loading-spinner-overlay/src";
 import {StatusBar} from "expo-status-bar";
 import i18next from "../../../services/i18next";
+import async from "async";
 
 
 const loginValidationSchema = yup.object().shape({
@@ -167,10 +168,10 @@ const LoginScreen = ({route, navigation}) => {
                     <Pressable
                         onPress={() => {
                             i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                                .then(() => {
+                                .then(async () => {
                                     I18nManager.allowRTL(i18next.language === 'ar');
                                     I18nManager.forceRTL(i18next.language === 'ar');
-                                    Updates.reloadAsync();
+                                    await Updates.reloadAsync();
                                 })
                         }}>
 

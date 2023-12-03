@@ -125,7 +125,7 @@ const HomeScreen = ({route, navigation}) => {
                     <Image source={require('../../assets/menu-button.png')}/>
                 </Pressable>
             </View>
-            <View className='flex-1 space-y-4'>
+            <View className='flex-1 space-y-2'>
                 <Spinner visible={isLoading}/>
                 <View className={"px-4"}>
                     <Carousel
@@ -189,7 +189,7 @@ const HomeScreen = ({route, navigation}) => {
                     {/*        <RefreshControl refreshing={isRefreshing} onRefresh={() => getHomeData()}/>*/}
                     {/*    }/>*/}
                 </View>
-                <View className={"px-4 mb-5 pb-5"}  style={{backgroundColor: '#63236f'}}>
+                <View className={"px-4 mb-5 pb-1"}  style={{backgroundColor: '#63236f'}}>
                     <Text style={{color: '#cbc19e', fontFamily: 'BoldFont'}} className={"py-1 text-lg"}>{t('media')}</Text>
                     <Carousel
                         ref={carouselRefMedia}

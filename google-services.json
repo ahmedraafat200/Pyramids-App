@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74782832089",
+    "project_id": "pyramids-b5ee7",
+    "storage_bucket": "pyramids-b5ee7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74782832089:android:e0e05dfd2901ece26955c8",
+        "android_client_info": {
+          "package_name": "com.ahmedraafat200.PyramidsApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp61h8r8kOXBEu10Rzd0XKjoxk_hOQrOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

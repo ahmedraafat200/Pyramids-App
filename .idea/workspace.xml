@@ -6,35 +6,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18ac6c87-98c7-4e0f-8b0a-6a87d1184c41" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/fonts/Hacen-Eltaroute.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/fonts/Nexa-Bold.otf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/fonts/Nexa-Light.otf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/adaptive-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/adaptive-icon1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/icon1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/splash1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locales/ar.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/ar.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/en.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Navigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navigation.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Steps/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Steps/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/LoginScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/LoginScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/GatePermissionScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/GatePermissionScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +63,7 @@
     &quot;RunOnceActivity.laravel-idea.search-composer-json&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp/assets&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp/node_modules/prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;allyConfigurable&quot;,
@@ -93,11 +73,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/src/screens" />
       <recent name="$PROJECT_DIR$/assets/fonts" />
       <recent name="$PROJECT_DIR$/locales" />
-      <recent name="$PROJECT_DIR$/src/screens/Auth" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/screens" />
@@ -139,7 +119,17 @@
       <workItem from="1700679777079" duration="11493000" />
       <workItem from="1700740833155" duration="17175000" />
       <workItem from="1700903750544" duration="679000" />
-      <workItem from="1700949269121" duration="6649000" />
+      <workItem from="1700949269121" duration="10785000" />
+      <workItem from="1701095570975" duration="2853000" />
+      <workItem from="1701190630009" duration="1164000" />
+      <workItem from="1701277463887" duration="487000" />
+      <workItem from="1701354779584" duration="1917000" />
+      <workItem from="1701382746119" duration="368000" />
+      <workItem from="1701386570666" duration="618000" />
+      <workItem from="1701419424102" duration="828000" />
+      <workItem from="1701423896128" duration="7843000" />
+      <workItem from="1701544163731" duration="541000" />
+      <workItem from="1701594759417" duration="208000" />
     </task>
     <servers />
   </component>

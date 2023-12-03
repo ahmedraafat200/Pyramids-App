@@ -56,7 +56,7 @@ const RegisterScreen = ({route, navigation}) => {
     const [hidePass, setHidePass] = useState(true);
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
-    const {deviceId} = useContext(AuthContext);
+    const {deviceId, exponentPushToken} = useContext(AuthContext);
     const { toggleDrawer,closeDrawer,openDrawer, goBack} = useNavigation();
 
     const role = route.params.role;
@@ -73,6 +73,7 @@ const RegisterScreen = ({route, navigation}) => {
         formData.append('role', role ?? 'owner');
         formData.append('token', '');
         formData.append('deviceId', deviceId);
+        formData.append('token', exponentPushToken);
 
         if (selectedImage !== profile){
             const fileName = selectedImage.split('/').pop();

@@ -24,6 +24,7 @@ import * as SecureStore from "expo-secure-store";
 import * as ImageManipulator from "expo-image-manipulator";
 import {useNavigation} from "@react-navigation/native";
 import i18next from "../../services/i18next";
+import {array} from "yup";
 
 
 const ProfileScreen = () => {
@@ -239,10 +240,10 @@ const ProfileScreen = () => {
                         <Pressable
                             onPress={() => {
                                 i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                                    .then(() => {
+                                    .then(async () => {
                                         I18nManager.allowRTL(i18next.language === 'ar');
                                         I18nManager.forceRTL(i18next.language === 'ar');
-                                        Updates.reloadAsync();
+                                        await Updates.reloadAsync();
                                     })
                             }}>
                             <Image className={'h-10'}

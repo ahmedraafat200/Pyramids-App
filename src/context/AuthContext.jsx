@@ -12,6 +12,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children, navigation}) => {
     const [user, setUser] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
+    const [exponentPushToken, setExponentPushToken] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
 
@@ -27,7 +28,26 @@ export const AuthProvider = ({children, navigation}) => {
                 let user = res.data;
                 setUser(user);
                 SecureStore.setItemAsync('user', JSON.stringify(user));
+
+                if (user.token !== exponentPushToken){
+                    updateExpoToken(user);
+                    console.log(exponentPushToken, 'token updated')
+                }
             }
+            setSplashLoading(false);
+        }).catch(e => {
+            setSplashLoading(false)
+        })
+    };
+
+    const updateExpoToken = (user) => {
+        setSplashLoading(true);
+
+        let formData = new FormData();
+        formData.append('userId', user.userId);
+        formData.append('role', user.role);
+        formData.append('token', exponentPushToken);
+        axiosInstance.post(`add_user_token.php`, formData).then(res => {
             setSplashLoading(false);
         }).catch(e => {
             setSplashLoading(false)
@@ -86,9 +106,25 @@ export const AuthProvider = ({children, navigation}) => {
             });
     }
 
+    const setExpoToken = () => {
+        setSplashLoading(true);
+        SecureStore.getItemAsync('exponentPushToken')
+            .then(exponentPushToken => {
+                if (exponentPushToken){
+                    setExponentPushToken(exponentPushToken);
+                    console.log(exponentPushToken, 'auth context')
+                }
+                setSplashLoading(false);
+            })
+            .catch(err => {
+                setSplashLoading(false);
+            });
+    }
+
     useEffect(() => {
         isLoggedIn();
         getDeviceId();
+        setExpoToken()
     }, [])
 
     const value = {
@@ -96,6 +132,7 @@ export const AuthProvider = ({children, navigation}) => {
         splashLoading,
         user,
         deviceId,
+        exponentPushToken,
         setUser,
         login,
         logout,
