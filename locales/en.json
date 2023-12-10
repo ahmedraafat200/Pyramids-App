@@ -67,5 +67,12 @@
   "areYouSureYouWantToDeleteYourAccount": "Are you sure you want to delete your account ?",
   "news": "News",
   "readMore": "Read More..",
-  "media": "Media"
+  "media": "Media",
+  "name": "Enter your name",
+  "enterYourMessage": "Enter Your Message",
+  "send": "Send",
+  "getInTouch": "Get In Touch",
+  "doYouHaveAnyQuestions": "Do you have any questions?",
+  "pleaseDontHesitateToContactUsDirectly": "Please don't hesitate to contact us directly.",
+  "ourTeamWillComeBackToYouInAMatterOfHoursToHelpYou": "Our team will come back to you in a matter of hours to help you."
 }

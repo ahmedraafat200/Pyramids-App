@@ -23,6 +23,7 @@ import * as yup from "yup";
 import {FontAwesome5} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import i18next from "../../../services/i18next";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const codeValidationSchema = yup.object().shape({
     password: yup
@@ -34,6 +35,7 @@ const codeValidationSchema = yup.object().shape({
 });
 
 const ChangePasswordScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [hidePass, setHidePass] = useState(true);
@@ -87,9 +89,10 @@ const ChangePasswordScreen = ({route, navigation}) => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../../assets/login-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
-                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={toggleDrawer} className="absolute left-6">
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop : insets.top}}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6" style={{paddingTop : insets.top}}>
                     <Image source={require('../../../assets/menu-button.png')}/>
                 </Pressable>
             </View>

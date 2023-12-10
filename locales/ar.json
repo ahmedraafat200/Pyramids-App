@@ -66,5 +66,13 @@
   "areYouSureYouWantToDeleteYourAccount": "هل انت متأكد من ارسال طلب مسح جميع البيانات؟",
   "news": "الاخبار",
   "readMore": "عرض المزيد..",
-  "media": "الوسائط"
+  "media": "الوسائط",
+  "name": "ادخل اسمك",
+  "enterYourMessage": "ادخل تفاصيل الرساله",
+  "send": "إرسال",
+  "getInTouch": "تواصل معنا",
+  "doYouHaveAnyQuestions": "هل لديك استفسار؟",
+  "pleaseDontHesitateToContactUsDirectly": "برجاء التواصل معنا دائما.",
+  "ourTeamWillComeBackToYouInAMatterOfHoursToHelpYou": "سيقوم الفريق المختص بالتواصل معكم في اقرب وقت ممكن."
+
 }

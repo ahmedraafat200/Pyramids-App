@@ -1,6 +1,8 @@
 import React, {useCallback, useContext, useMemo, useRef, useState} from "react";
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
@@ -39,11 +41,16 @@ import {BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider} from "@
 import {navigationRef} from "../RootNavigation";
 import MyAccessScreen from "../screens/MyAccessScreen";
 import NewsScreen from "../screens/NewsScreen";
+import ComingSoonScreen from "../screens/ComingSoonScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import ContactScreen from "../screens/ContactScreen";
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
 
 const CustomDrawer = props => {
     const {t} = useTranslation();
@@ -274,12 +281,13 @@ const DrawerNavigator = () => {
                 },
                 headerShown: false
             }}
-            initialRouteName={'Home'}
+            initialRouteName={'Tabs'}
         >
             <Drawer.Screen
-                name={'Home'}
-                component={HomeScreen}
+                name={'Tabs'}
+                component={TabNavigator}
                 options={{
+                    swipeEnabled: false,
                     title: t('home'),
                     drawerLabelStyle: {
                         fontFamily: 'LightFont'
@@ -352,6 +360,93 @@ const DrawerNavigator = () => {
                     }}
             />
         </Drawer.Navigator>
+    )
+}
+
+const TabNavigator = () => {
+    const insets = useSafeAreaInsets();
+    const {t} = useTranslation();
+    return (
+        <Tab.Navigator
+            initialRouteName={"Home"}
+            // screenOptions={{
+            //     tabBarLabelStyle: {paddingBottom: 6, fontSize: 10},
+            //     tabBarStyle: {padding: 10, height: 60 + insets.bottom}
+            // }}
+            screenOptions={{
+                tabBarShowLabel: false,
+                tabBarBackground: () => (
+                        <Image className={"flex-1 w-full"} source={i18next.language === 'ar' ? require('../../assets/footer-bg-rtl.png') : require('../../assets/footer-bg.png')} resizeMode="cover"/>
+                ),
+                tabBarStyle: {
+                    height: 60,
+                    borderTopWidth: 0,
+                    paddingBottom: 0
+                }
+            }}
+        >
+            <Tab.Screen
+                name={"Home"}
+                component={HomeScreen}
+                options={
+                {
+                    headerShown: false,
+                    tabBarShowLabel:false,
+                    tabBarIcon: ({focused}) => (
+                        <View className={"justify-center items-center"}>
+                            <Image style={focused ? {tintColor:  "#ffffff"} : {}} className={"h-16 w-16"} source={require("../../assets/home-icon.png")} resizeMode={"contain"}/>
+                            {/*<Text>{t('home')}</Text>*/}
+                        </View>
+                    )
+                }}
+                initialParams={{screen: "Home"}}
+            />
+            <Tab.Screen
+                name={"Notifications"}
+                component={NotificationsScreen}
+                options={
+                    {
+                        headerShown: false,
+                        tabBarShowLabel:false,
+                        tabBarIcon: ({focused}) => (
+                            <View className={"justify-center items-center"}>
+                                <Image style={focused ? {tintColor:  "#ffffff"} : {}} className={"h-20 w-20"} source={require("../../assets/not-icon.png")} resizeMode={"contain"}/>
+                                {/*<Text>{t('notifications')}</Text>*/}
+                            </View>
+                        )
+                    }}
+            />
+            <Tab.Screen
+                name={"Projects"}
+                component={ComingSoonScreen}
+                options={
+                    {
+                        headerShown: false,
+                        tabBarShowLabel:false,
+                        tabBarIcon: ({focused}) => (
+                            <View className={"justify-center items-center"}>
+                                <Image style={focused ? {tintColor:  "#ffffff"} : {}} className={"h-16 w-16"} source={require("../../assets/proj-icon.png")} resizeMode={"contain"}/>
+                                {/*<Text>{t('projects')}</Text>*/}
+                            </View>
+                        )
+                    }}
+            />
+            <Tab.Screen
+                name={"Contact"}
+                component={ContactScreen}
+                options={
+                    {
+                        headerShown: false,
+                        tabBarShowLabel:false,
+                        tabBarIcon: ({focused}) => (
+                            <View className={"justify-center items-center"}>
+                                <Image style={focused ? {tintColor:  "#ffffff"} : {}} className={"h-16 w-16"} source={require("../../assets/contact-icon.png")} resizeMode={"contain"}/>
+                                {/*<Text>{t('contact')}</Text>*/}
+                            </View>
+                        )
+                    }}
+            />
+        </Tab.Navigator>
     )
 }
 

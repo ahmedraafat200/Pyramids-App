@@ -15,7 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import {useTranslation} from "react-i18next";
 import {Formik} from "formik";
 import * as yup from "yup";
-import {FontAwesome5, MaterialIcons} from "@expo/vector-icons";
+import {FontAwesome5, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import Steps from "../../components/Steps";
 import userImage from "../../../assets/user.png";
 import axiosInstance from "../../axiosInstance";
@@ -23,6 +23,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigation} from "@react-navigation/native";
 import i18next from "../../../services/i18next";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 const registerValidationSchema = yup.object().shape({
@@ -51,6 +52,7 @@ const registerValidationSchema = yup.object().shape({
 });
 
 const RegisterScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false)
     const [hidePass, setHidePass] = useState(true);
@@ -130,10 +132,13 @@ const RegisterScreen = ({route, navigation}) => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../../assets/login-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
-                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={goBack} className="absolute left-6">
-                    <Image source={require('../../../assets/menu-button.png')}/>
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop: insets.top}}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../../assets/app_bar.jpg') : require('../../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={goBack} className="absolute left-6" style={{paddingTop: insets.top}}>
+                    {i18next.language === 'ar' ? <Ionicons name="chevron-forward" size={30} color="#cbc19e"/> :
+                        <Ionicons name="chevron-back" size={30} color="#cbc19e"/>
+                    }
                 </Pressable>
             </View>
         <KeyboardAvoidingView

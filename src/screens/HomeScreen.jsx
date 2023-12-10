@@ -3,7 +3,7 @@ import {
     Button,
     Dimensions, FlatList,
     Image,
-    ImageBackground, Pressable, RefreshControl,
+    ImageBackground, Pressable, RefreshControl, ScrollView,
     Share,
     StyleSheet,
     Text,
@@ -23,11 +23,13 @@ import {ResizeMode, Video} from "expo-av";
 import {navigationRef} from "../RootNavigation";
 import i18next from "../../services/i18next";
 import PaginationDot from 'react-native-animated-pagination-dot'
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const HomeScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
@@ -118,14 +120,14 @@ const HomeScreen = ({route, navigation}) => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../assets/home-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop : insets.top}}>
                 <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
                        source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={toggleDrawer} className="absolute left-6">
+                <Pressable onPress={toggleDrawer} className="absolute left-6" style={{paddingTop : insets.top}}>
                     <Image source={require('../../assets/menu-button.png')}/>
                 </Pressable>
             </View>
-            <View className='flex-1 space-y-2'>
+            <ScrollView className='flex-1 space-y-2'>
                 <Spinner visible={isLoading}/>
                 <View className={"px-4"}>
                     <Carousel
@@ -235,7 +237,7 @@ const HomeScreen = ({route, navigation}) => {
                         />
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         </ImageBackground>
 
     <BottomSheetModalProvider>

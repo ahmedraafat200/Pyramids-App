@@ -6,15 +6,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18ac6c87-98c7-4e0f-8b0a-6a87d1184c41" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ios/PyramidsDevelopment/Supporting/Expo.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-1698664753979.aab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/ar.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/ar.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locales/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/locales/en.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/context/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Navigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navigation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ChangePasswordScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/CodeLoginScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/LoginScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/LoginScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/OtpVerificationScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/RegisterValidationScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Auth/ResetPasswordScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/GatePermissionScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/GatePermissionScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MyAccessScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MyAccessScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/NewsScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/NewsScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OneTimePassScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/ProfileScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,14 +52,21 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/App.jsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/android/app/build.gradle" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/android/build.gradle" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/android/settings.gradle" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/app.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/eas.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/locales/ar.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/locales/en.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/package.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/Navigation.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/config.js" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/screens/Auth/RegisterScreen.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/screens/GatePermissionScreen.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/screens/HomeScreen.jsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/screens/InvitationsScreen.jsx" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/screens/ProfileScreen.jsx" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/screens/TimedPassScreen.jsx" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
@@ -63,7 +85,7 @@
     &quot;RunOnceActivity.laravel-idea.search-composer-json&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Volumes/T7-Shield/Apps/PyramidsApp/src/screens&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/ahmedraafat200/Sites/PyramidsApp/node_modules/prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;allyConfigurable&quot;,
@@ -73,9 +95,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/src/screens" />
+      <recent name="$PROJECT_DIR$/assets" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/assets/fonts" />
       <recent name="$PROJECT_DIR$/locales" />
     </key>
@@ -130,6 +152,10 @@
       <workItem from="1701423896128" duration="7843000" />
       <workItem from="1701544163731" duration="541000" />
       <workItem from="1701594759417" duration="208000" />
+      <workItem from="1701612682854" duration="512000" />
+      <workItem from="1701634009136" duration="22006000" />
+      <workItem from="1701713016233" duration="678000" />
+      <workItem from="1702115898974" duration="16607000" />
     </task>
     <servers />
   </component>

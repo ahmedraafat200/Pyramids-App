@@ -8,7 +8,7 @@ import {
     View,
     SafeAreaView,
     ImageBackground,
-    StyleSheet
+    StyleSheet, ScrollView
 } from "react-native";
 // import Spinner from 'react-native-loading-spinner-overlay';
 import {AuthContext} from "../../context/AuthContext";
@@ -21,6 +21,8 @@ import Spinner from "react-native-loading-spinner-overlay/src";
 import {StatusBar} from "expo-status-bar";
 import i18next from "../../../services/i18next";
 import async from "async";
+import RNRestart from "react-native-restart";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 const loginValidationSchema = yup.object().shape({
@@ -36,6 +38,7 @@ const loginValidationSchema = yup.object().shape({
 
 
 const LoginScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const {login, isLoading} = useContext(AuthContext)
 
@@ -45,7 +48,7 @@ const LoginScreen = ({route, navigation}) => {
                          source={require('../../../assets/login-bg.png')}>
         <SafeAreaView className='flex-1 items-center'>
             <Spinner visible={isLoading} />
-            <View className='p-10 w-full'>
+            <ScrollView className='px-10 w-full'>
                 <View className='items-center h-52 py-8'>
                     <Image className={'flex-1 w-full'}
                            source={require('../../../assets/login-icon.png')}
@@ -128,24 +131,22 @@ const LoginScreen = ({route, navigation}) => {
                                 </Pressable>
                             </View>
 
-
                             <ImageBackground
+                                className={"w-full rounded-xl h-16 mb-1"}
                                 source={require('../../../assets/button-bg.png')}
-                                resizeMode={'cover'}>
-                            <Pressable
-                                className='h-14 rounded-xl flex flex-row justify-center items-center px-6'
-                                onPress={() => {
-                                    handleSubmit()
-                                }}
-                                disabled={!isValid}
-                            >
-
-                                <View className='flex-1 flex items-center'>
-                                    <Text style={{
-                                        fontFamily: 'LightFont',
-                                    }} className='text-white text-base font-medium'>{t('login')}</Text>
-                                </View>
-                            </Pressable>
+                                resizeMode={'contain'}>
+                                <Pressable
+                                    className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
+                                    onPress={() => {
+                                        handleSubmit()
+                                    }}
+                                >
+                                    <View className='flex-1 flex items-center'>
+                                        <Text style={{
+                                            fontFamily: 'LightFont',
+                                        }} className='text-white text-base font-medium'>{t('login')}</Text>
+                                    </View>
+                                </Pressable>
                             </ImageBackground>
                         </>
                     )}
@@ -168,10 +169,10 @@ const LoginScreen = ({route, navigation}) => {
                     <Pressable
                         onPress={() => {
                             i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                                .then(async () => {
+                                .then(() => {
                                     I18nManager.allowRTL(i18next.language === 'ar');
                                     I18nManager.forceRTL(i18next.language === 'ar');
-                                    await Updates.reloadAsync();
+                                    RNRestart.restart();
                                 })
                         }}>
 
@@ -184,13 +185,13 @@ const LoginScreen = ({route, navigation}) => {
                         {/*}} className='text-white text-base font-medium'>{t('language')}</Text>*/}
                     </Pressable>
 
-                    <Image className={'h-14'}
-                           source={require('../../../assets/sky-login-logo.png')}
-                           resizeMode={"contain"}
-                    />
+                    {/*<Image className={'h-14'}*/}
+                    {/*       source={require('../../../assets/sky-login-logo.png')}*/}
+                    {/*       resizeMode={"contain"}*/}
+                    {/*/>*/}
 
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
         </ImageBackground>
     );

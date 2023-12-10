@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pyramids Development",
     "slug": "PyramidsApp",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -20,10 +20,10 @@
         "usesNonExemptEncryption": false
       },
       "bundleIdentifier": "com.ahmedraafat200.PyramidsAp",
-      "buildNumber": "4",
+      "buildNumber": "5",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "This app uses the photo library so the user can change his profile picture.",
-        "CFBundleDisplayName": "RS+"
+        "CFBundleDisplayName": "Pyramids Development"
       }
     },
     "android": {
@@ -33,7 +33,7 @@
       },
       "package": "com.ahmedraafat200.PyramidsApp",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 9
+      "versionCode": 13
     },
     "web": {
       "favicon": "./assets/favicon.png"

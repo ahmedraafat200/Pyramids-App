@@ -26,10 +26,12 @@ import async from "async";
 import {useTranslation} from "react-i18next";
 import {useNavigation} from "@react-navigation/native";
 import i18next from "../../services/i18next";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const ScreenWidth = Dimensions.get("window").width;
 
 const InvitationsScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false)
@@ -174,7 +176,7 @@ const InvitationsScreen = ({route, navigation}) => {
                                 {item.generated_at}
                             </Text>
                         </View>
-                        <View className="flex-row items-center justify-between">
+                        <View className="flex-row items-center justify-between space-x-1">
                             <View className="flex-row items-center">
                                 <Text style={{
                                     fontFamily: 'LightFont',
@@ -551,9 +553,10 @@ const InvitationsScreen = ({route, navigation}) => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../assets/login-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
-                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={toggleDrawer} className="absolute left-6">
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop : insets.top}}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6" style={{paddingTop : insets.top}}>
                     <Image source={require('../../assets/menu-button.png')}/>
                 </Pressable>
             </View>

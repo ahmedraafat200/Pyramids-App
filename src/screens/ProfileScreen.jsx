@@ -5,7 +5,7 @@ import {
     FlatList, I18nManager,
     Image, ImageBackground,
     Platform,
-    Pressable,
+    Pressable, ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -25,9 +25,12 @@ import * as ImageManipulator from "expo-image-manipulator";
 import {useNavigation} from "@react-navigation/native";
 import i18next from "../../services/i18next";
 import {array} from "yup";
+import RNRestart from "react-native-restart";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 const ProfileScreen = () => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const {user, setUser} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +39,7 @@ const ProfileScreen = () => {
     const profile = Image.resolveAssetSource(userImage).uri;
     const [selectedImage, setSelectedImage] = useState(profile);
     const [updateProfile, setUpdateProfile] = useState(false)
-    const { toggleDrawer,closeDrawer,openDrawer } = useNavigation();
+    const {toggleDrawer, closeDrawer, openDrawer} = useNavigation();
 
     function updateProfilePicture() {
         setIsLoading(true);
@@ -140,7 +143,7 @@ const ProfileScreen = () => {
     };
 
     const renderRelated = ({item}) => (
-        <View className='bg-gray-50 rounded-xl max-w-full px-2 py-3 m-2'
+        <View className='bg-gray-50 rounded-xl max-w-full px-2 py-3 my-1 mx-2'
               style={[
                   styles.cardShadow
               ]}
@@ -158,13 +161,13 @@ const ProfileScreen = () => {
                         <Text style={{
                             fontFamily: 'BoldFont',
                         }}
-                            className="bg-gray-900 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
+                              className="bg-gray-900 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
                             {item.source}
                         </Text>
                         <Text style={{
                             fontFamily: 'BoldFont',
                         }}
-                            className="bg-gray-600 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
+                              className="bg-gray-600 text-white py-1 px-4 rounded-full text-sm font-bold capitalize">
                             {item.userstatus}
                         </Text>
                     </View>
@@ -186,110 +189,111 @@ const ProfileScreen = () => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../assets/login-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
-                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain" source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={toggleDrawer} className="absolute left-6">
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop : insets.top}}>
+                <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
+                       source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
+                <Pressable onPress={toggleDrawer} className="absolute left-6" style={{paddingTop : insets.top}}>
                     <Image source={require('../../assets/menu-button.png')}/>
                 </Pressable>
             </View>
-        <View className="flex-1 px-10 py-2 items-center">
-            <Spinner visible={isLoading}/>
-            {userData &&
-                <View className="flex-1 w-full justify-between">
-                    <View className="flex-1 items-center space-y-2 divide-y-2 divide-gray-400">
-                    <View className="flex-col w-full items-center">
-                        <TouchableOpacity onPress={handleImageSelection}>
-                            <Image
-                                source={{uri: updateProfile ? selectedImage : userData.userPhoto}}
-                                style={{
-                                    height: 100,
-                                    width: 100,
-                                    borderRadius: 85,
-                                    borderWidth: 2,
-                                    borderColor: 'black',
-                                    marginBottom: 10
+            <ScrollView className="flex-1 px-4 py-2">
+                <Spinner visible={isLoading}/>
+                {userData &&
+                    <View className="flex-1 w-full">
+                        <View className="flex-1 items-center space-y-2 divide-y-2 divide-gray-400">
+                            <View className="flex-col w-full items-center">
+                                <TouchableOpacity onPress={handleImageSelection}>
+                                    <Image
+                                        source={{uri: updateProfile ? selectedImage : userData.userPhoto}}
+                                        style={{
+                                            height: 100,
+                                            width: 100,
+                                            borderRadius: 85,
+                                            borderWidth: 2,
+                                            borderColor: 'black',
+                                            marginBottom: 10
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={{
+                                    fontFamily: 'BoldFont',
                                 }}
-                            />
-                        </TouchableOpacity>
-                        <Text style={{
-                            fontFamily: 'BoldFont',
-                        }}
-                            className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
-                        <Text style={{
-                            fontFamily: 'LightFont',
-                        }} className="text-lg font-medium capitalize">{userData.email}</Text>
-                        <Text style={{
-                            fontFamily: 'LightFont',
-                        }} className="text-lg font-normal capitalize">{userData.unit}</Text>
-                        {updateProfile &&
+                                      className="text-xl font-bold capitalize">{userData.first_name + ' ' + userData.last_name}</Text>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className="text-lg font-medium capitalize">{userData.email}</Text>
+                                <Text style={{
+                                    fontFamily: 'LightFont',
+                                }} className="text-lg font-normal capitalize">{userData.unit}</Text>
+                                {updateProfile &&
+                                    <Pressable
+                                        className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
+                                        onPress={() => {
+                                            updateProfilePicture()
+                                        }}
+                                    >
+                                        <View className='flex-1 flex items-center'>
+                                            <Text style={{
+                                                fontFamily: 'LightFont',
+                                            }} className='text-white text-base font-medium'>{t('updatePicture')}</Text>
+                                        </View>
+                                    </Pressable>
+                                }
+                            </View>
+                            <View className="rounded-xl w-fit py-1 px-4">
+                                <Pressable
+                                    onPress={() => {
+                                        i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
+                                            .then(() => {
+                                                I18nManager.allowRTL(i18next.language === 'ar');
+                                                I18nManager.forceRTL(i18next.language === 'ar');
+                                                RNRestart.restart();
+                                            })
+                                    }}>
+                                    <Image className={'h-10'}
+                                           source={i18next.language === 'ar' ? require('../../assets/en.png') : require('../../assets/ar.png')}
+                                           resizeMode={"contain"}
+                                    />
+                                    {/*<Text style={{*/}
+                                    {/*    fontFamily: 'LightFont',*/}
+                                    {/*}} className='text-white text-base font-medium'>{t('language')}</Text>*/}
+                                </Pressable>
+                            </View>
+                            <View className="flex flex-col w-full">
+                                <FlatList
+                                    data={relatedData}
+                                    renderItem={renderRelated}
+                                    keyExtractor={item => item.email}
+                                />
+                            </View>
+                        </View>
+                        <ImageBackground
+                            className={"rounded-xl h-16 my-1"}
+                            source={require('../../assets/button-bg.png')}
+                            resizeMode={'contain'}>
                             <Pressable
-                                className='h-12 bg-black rounded-md flex flex-row justify-center items-center my-1 px-6'
+                                className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
                                 onPress={() => {
-                                    updateProfilePicture()
+                                    Alert.alert(
+                                        t('deleteConfirmation'),
+                                        t('areYouSureYouWantToDeleteYourAccount'),
+                                        [
+                                            {text: t('no'), style: 'cancel'},
+                                            {text: t('yes'), onPress: () => deleteAccount()},
+                                        ]
+                                    );
                                 }}
                             >
                                 <View className='flex-1 flex items-center'>
                                     <Text style={{
                                         fontFamily: 'LightFont',
-                                    }} className='text-white text-base font-medium'>{t('updatePicture')}</Text>
+                                    }} className='text-white text-base font-medium'>{t('deleteMyAccount')}</Text>
                                 </View>
                             </Pressable>
-                        }
+                        </ImageBackground>
                     </View>
-                    <View className="rounded-xl w-fit py-1 px-4">
-                        <Pressable
-                            onPress={() => {
-                                i18next.changeLanguage(i18next.language === 'ar' ? 'en' : 'ar')
-                                    .then(async () => {
-                                        I18nManager.allowRTL(i18next.language === 'ar');
-                                        I18nManager.forceRTL(i18next.language === 'ar');
-                                        await Updates.reloadAsync();
-                                    })
-                            }}>
-                            <Image className={'h-10'}
-                                   source={i18next.language === 'ar' ? require('../../assets/en.png') : require('../../assets/ar.png')}
-                                   resizeMode={"contain"}
-                            />
-                            {/*<Text style={{*/}
-                            {/*    fontFamily: 'LightFont',*/}
-                            {/*}} className='text-white text-base font-medium'>{t('language')}</Text>*/}
-                        </Pressable>
-                    </View>
-                    <View className="flex flex-col w-full">
-                        <FlatList
-                            data={relatedData}
-                            renderItem={renderRelated}
-                            keyExtractor={item => item.email}
-                        />
-                    </View>
-                    </View>
-                    <ImageBackground
-                        className={"rounded-xl h-16 mb-1"}
-                        source={require('../../assets/button-bg.png')}
-                        resizeMode={'contain'}>
-                        <Pressable
-                            className='h-16 rounded-xl flex flex-row justify-center items-center px-6'
-                            onPress={() => {
-                                Alert.alert(
-                                    t('deleteConfirmation'),
-                                    t('areYouSureYouWantToDeleteYourAccount'),
-                                    [
-                                        {text: t('no'), style: 'cancel'},
-                                        {text: t('yes'), onPress: () => deleteAccount()},
-                                    ]
-                                );
-                            }}
-                        >
-                            <View className='flex-1 flex items-center'>
-                                <Text style={{
-                                    fontFamily: 'LightFont',
-                                }} className='text-white text-base font-medium'>{t('deleteMyAccount')}</Text>
-                            </View>
-                        </Pressable>
-                    </ImageBackground>
-                </View>
-            }
-        </View>
+                }
+            </ScrollView>
         </ImageBackground>
     );
 };

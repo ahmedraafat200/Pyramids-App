@@ -18,9 +18,10 @@ import * as yup from "yup";
 import axiosInstance from "../axiosInstance";
 import ViewShot from "react-native-view-shot";
 import * as Sharing from 'expo-sharing';
-import {AntDesign} from "@expo/vector-icons";
+import {AntDesign, Ionicons} from "@expo/vector-icons";
 import i18next from "../../services/i18next";
 import {useNavigation} from "@react-navigation/native";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 
@@ -34,6 +35,7 @@ const registerValidationSchema = yup.object().shape({
 });
 
 const OneTimePassScreen = ({route, navigation}) => {
+    const insets = useSafeAreaInsets();
     const {t} = useTranslation();
     const {user} = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
@@ -75,11 +77,13 @@ const OneTimePassScreen = ({route, navigation}) => {
         <ImageBackground className={"flex-1 w-full"}
                          resizeMode='cover'
                          source={require('../../assets/login-bg.png')}>
-            <View className={"flex-row items-center mt-8 px-4"}>
+            <View className={"flex-row items-center mb-1 px-4"} style={{paddingTop: insets.top}}>
                 <Image className={"w-full h-16 rounded-2xl"} resizeMode="contain"
                        source={i18next.language === 'ar' ? require('../../assets/app_bar.jpg') : require('../../assets/right-ban-withlogo.jpg')}/>
-                <Pressable onPress={goBack} className="absolute left-6">
-                    <Image source={require('../../assets/menu-button.png')}/>
+                <Pressable onPress={goBack} className="absolute left-6" style={{paddingTop: insets.top}}>
+                    {i18next.language === 'ar' ? <Ionicons name="chevron-forward" size={30} color="#cbc19e"/> :
+                        <Ionicons name="chevron-back" size={30} color="#cbc19e"/>
+                    }
                 </Pressable>
             </View>
         <KeyboardAvoidingView
